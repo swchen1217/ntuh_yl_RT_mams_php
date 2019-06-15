@@ -1,8 +1,9 @@
 <?php
-require("config.php");
+//require("config.php");
 ?>
-<center>
 <?php
-
+$in = "";
+if(isset($_REQUEST["in"]))
+	$in=$_REQUEST["in"];
+echo $in;
 ?>
-</center>
