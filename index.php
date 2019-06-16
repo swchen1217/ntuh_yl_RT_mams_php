@@ -3,7 +3,7 @@
 ?>
 <?php
 $in = "";
-if(isset($_REQUEST["in"]))
-	$in=$_REQUEST["in"];
+if(isset($_POST["in"]))
+	$in=$_POST["in"];
 echo $in;
 ?>
