@@ -1,7 +1,31 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 require("config.php");
-?>
-<?php
+
+require('./PHPMailer/src/Exception.php');
+require('./PHPMailer/src/PHPMailer.php');
+require('./PHPMailer/src/SMTP.php');
+
+mb_internal_encoding('UTF-8');
+
+if (!function_exists('ereg'))
+{
+    function ereg($pattern, $string, $regs)
+    {
+        return preg_match('/'.$pattern.'/', $string, $regs);
+    }
+}
+ 
+if (!function_exists('eregi'))
+{
+    function eregi($pattern, $string, $regs)
+    {
+        return preg_match('/'.$pattern.'/i', $string, $regs);
+    }
+}
+
 $mode = "";
 if(isset($_REQUEST["mode"]))
 	$mode=$_REQUEST["mode"];
@@ -14,6 +38,10 @@ if(isset($_REQUEST["pw"]))
 $new_pw = "";
 if(isset($_REQUEST["new_pw"]))
 	$new_pw=$_REQUEST["new_pw"];
+$email = "";
+if(isset($_REQUEST["email"]))
+	$email=$_REQUEST["email"];
+
 if($mode=="connection_test"){
     echo "connection_ok";
 }
@@ -36,6 +64,47 @@ if($mode=="get_user_name"){
 	$rs=mysqli_query($con,$sql);
     list($name)=mysqli_fetch_row($rs);
     echo $name;
+    exit;
+}
+if($mode=="check_has_email"){
+    $sql = 'SELECT * FROM `user_tb` WHERE `email`="'.$email.'"';
+	$rs=mysqli_query($con,$sql);
+    if(mysqli_num_rows($rs) == 0){
+        echo "no_email";
+    }else{
+        echo "has_email";
+    }
+    exit;
+}
+if($mode=="forget_pw"){
+    $sql = 'SELECT name,account FROM `user_tb` WHERE `email`="'.$email.'"';
+	$rs=mysqli_query($con,$sql);
+    list($name,$acc_2)=mysqli_fetch_row($rs);
+    $tmp_pw="tmppw_".substr(md5(uniqid(rand(), true)),0,10);
+    
+    $forget_pw_mail_body = $name.' 你好<br>您的員工編號(帳號):'.$acc_2.'<br>請使用以下連結更改密碼<br>臨時密碼:'.$tmp_pw.'<br><font color=red>注意:臨時密碼與連結僅在<b>30分鐘</b>內有效,請在<b>30分鐘</b>內更改密碼,否則須重新申請</font><br>更改密碼連結:<a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?tmppw='.$tmp_pw.'">http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?tmppw='.$tmp_pw.'</a>';
+    
+    $mail = new PHPMailer(true);
+    try {
+        //$mail->SMTPDebug = 3;
+        $mail->isSMTP();
+        $mail->Charset='UTF-8';
+        $mail->Host = 'ssl://smtp.gmail.com:465';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'ntuhyl.mdms@gmail.com';
+        $mail->Password = 'ntuhntuh';
+        $mail->setFrom('ntuhyl.mdms@gmail.com', 'NTUH.YL 儀器管理系統');
+        $mail->addAddress($email);
+        $mail->addReplyTo('ntuhyl.mdms@gmail.com', 'NTUH.YL 儀器管理系統');
+        $mail->isHTML(true);
+        $mail->Subject = 'NTUH.YL 儀管系統 忘記密碼';
+        $mail->Body= $forget_pw_mail_body;
+        $mail->send();
+            echo '寄信成功';
+    } catch (Exception $e) {
+        echo 'Message could not be sent.';
+        echo 'Mailer Error: ' . $mail->ErrorInfo;
+    }
     exit;
 }
 ?>
