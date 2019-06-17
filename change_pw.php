@@ -53,8 +53,14 @@ if($input_new_pw==""){
             echo "<font color=red><b>錯誤:請重新申請</b></font>";
         }else{
             list($time)=mysqli_fetch_row($rs);
-            echo $time;
-            echo (strtotime(date("Y-m-d H:i:s",time())) - strtotime($time));
+            if((strtotime(date("Y-m-d H:i:s",time())) - strtotime($time))<=1800){
+                if($input_new_pw==$input_new_pw_re){
+                    $sql2 = 'UPDATE `user_tb` SET `password`="'.$input_new_pw.'" WHERE `account`="'.$acc.'"';
+                    $rs=mysqli_query($con,$sql2);
+                }else{
+                    
+                }
+            }
         }
     }else{
         
