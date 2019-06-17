@@ -77,7 +77,24 @@ if($redirection_ok=="true" && $acc!=""){
                 }
             }
         }else{
-            
+            $sql5 = 'SELECT account,password FROM `user_tb` WHERE `account`="'.$input_acc.'"';
+            $rs5=mysqli_query($con,$sql5);
+            if(mysqli_num_rows($rs5) == 0){
+                echo '<font color=red><b>錯誤:此員工編號尚未註冊<br>請重新輸入</b></font><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php">回上頁</a>';
+            }else{
+                list($db_acc,$db_pw)=mysqli_fetch_row($rs5);
+                if($input_old_pw==$db_pw){
+                    if($input_new_pw==$input_new_pw_re){
+                        $sql6 = 'UPDATE `user_tb` SET `password`="'.$input_new_pw.'" WHERE `account`="'.$input_acc.'"';
+                        mysqli_query($con,$sql6);
+                        echo "<font color=blue><b>成功:已成功更改密碼</b></font>";
+                    }else{
+                        echo '<font color=red><b>錯誤:新密碼與確認新密碼不相符<br>請重新輸入</b></font><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php">回上頁</a>';
+                    }
+                }else{
+                    echo '<font color=red><b>錯誤:原密碼輸入錯誤<br>請重新輸入</b></font><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php">回上頁</a>';
+                }
+            }
         }
     }
 }
