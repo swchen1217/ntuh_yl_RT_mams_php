@@ -51,6 +51,7 @@ if($redirection_ok=="true" && $acc!=""){
             </form>
         <?php
         }
+        echo '<font color=red><b>注意:新密碼不允許以"tmppw_"為開頭</b></font>';
     }else{
         if($tmppw!=""){
             $sql = 'SELECT application_time FROM `user_tmppw_tb` WHERE `account`="'.$acc.'" and `tmppw`="'.$tmppw.'" order by application_time desc';
@@ -61,11 +62,15 @@ if($redirection_ok=="true" && $acc!=""){
                 list($time)=mysqli_fetch_row($rs);
                 if((strtotime(date("Y-m-d H:i:s",time())) - strtotime($time))<=1800){
                     if($input_new_pw==$input_new_pw_re){
-                        $sql2 = 'UPDATE `user_tb` SET `password`="'.$input_new_pw.'" WHERE `account`="'.$acc.'"';
-                        mysqli_query($con,$sql2);
-                        $sql4 = 'DELETE FROM `user_tmppw_tb`WHERE `account`="'.$acc.'"';
-                        mysqli_query($con,$sql4);
-                        echo "<font color=blue><b>成功:已成功更改密碼</b></font>";
+                        if(substr($input_new_pw,0,6)!="tmppw_"){
+                            $sql2 = 'UPDATE `user_tb` SET `password`="'.$input_new_pw.'" WHERE `account`="'.$acc.'"';
+                            mysqli_query($con,$sql2);
+                            $sql4 = 'DELETE FROM `user_tmppw_tb`WHERE `account`="'.$acc.'"';
+                            mysqli_query($con,$sql4);
+                            echo "<font color=blue><b>成功:已成功更改密碼</b></font>";
+                        }else{
+                            echo '<font color=red><b>錯誤:新密碼不允許以"tmppw_"為開頭<br>請重新輸入</b></font><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?acc='.$acc.'&tmppw='.$tmppw.'">回上頁</a>';
+                        }
                     }else{
                         echo '<font color=red><b>錯誤:新密碼與確認新密碼不相符<br>請重新輸入</b></font><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?acc='.$acc.'&tmppw='.$tmppw.'">回上頁</a>';
                     }
@@ -85,9 +90,15 @@ if($redirection_ok=="true" && $acc!=""){
                 list($db_acc,$db_pw)=mysqli_fetch_row($rs5);
                 if($input_old_pw==$db_pw){
                     if($input_new_pw==$input_new_pw_re){
-                        $sql6 = 'UPDATE `user_tb` SET `password`="'.$input_new_pw.'" WHERE `account`="'.$input_acc.'"';
-                        mysqli_query($con,$sql6);
-                        echo "<font color=blue><b>成功:已成功更改密碼</b></font>";
+                        if(substr($input_new_pw,0,6)!="tmppw_"){
+                            $sql6 = 'UPDATE `user_tb` SET `password`="'.$input_new_pw.'" WHERE `account`="'.$input_acc.'"';
+                            mysqli_query($con,$sql6);
+                            $sql7 = 'DELETE FROM `user_tmppw_tb`WHERE `account`="'.$input_acc.'"';
+                            mysqli_query($con,$sql7);
+                            echo "<font color=blue><b>成功:已成功更改密碼</b></font>";
+                        }else{
+                            echo '<font color=red><b>錯誤:新密碼不允許以"tmppw_"為開頭<br>請重新輸入</b></font><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php">回上頁</a>';
+                        }
                     }else{
                         echo '<font color=red><b>錯誤:新密碼與確認新密碼不相符<br>請重新輸入</b></font><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php">回上頁</a>';
                     }

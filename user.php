@@ -54,11 +54,28 @@ if($mode=="login_check"){
     if(mysqli_num_rows($rs) == 0){
         echo "no_acc";
     }else{
-        list($pw_r)=mysqli_fetch_row($rs);
-        if($pw_r==$pw)
-            echo "ok";
-        else
-            echo "pw_error";
+        if(substr($pw,0,6)=="tmppw_"){
+            $sql2 = 'SELECT tmppw,application_time FROM `user_tmppw_tb` WHERE `account`="'.$acc.'" order by application_time desc';
+            $rs2=mysqli_query($con,$sql2);
+            if(mysqli_num_rows($rs2) == 0)
+                echo "tmppw_no_tmppw";
+            else{
+                list($tmppw_r,$application_time_r)=mysqli_fetch_row($rs2);
+                if((strtotime(date("Y-m-d H:i:s",time())) - strtotime($application_time_r))<=1800){
+                    if($pw==$tmppw_r)
+                        echo "tmppw_ok";
+                    else
+                        echo "tmppw_error";
+                }else
+                    echo "tmppw_timeout";
+            }
+        }else{
+            list($pw_r)=mysqli_fetch_row($rs);
+            if($pw_r==$pw)
+                echo "ok";
+            else
+                echo "pw_error";
+        }
     }
     exit;
 }
@@ -83,9 +100,9 @@ if($mode=="forget_pw"){
     $sql = 'SELECT name,account FROM `user_tb` WHERE `email`="'.$email.'"';
 	$rs=mysqli_query($con,$sql);
     list($name,$acc_2)=mysqli_fetch_row($rs);
-    $tmp_pw="tmppw_".substr(md5(uniqid(rand(), true)),0,10);
+    $tmp_pw="tmppw_".substr(md5(uniqid(rand(), true)),0,8);
     
-    $forget_pw_mail_body = $name.' 你好<br>員工編號(帳號):'.$acc_2.'<br>請使用以下連結更改密碼<br>可在有效時間內使用臨時密碼登入儀器管理系統<br>臨時密碼:'.$tmp_pw.'<br><font color=red>注意:臨時密碼與連結僅在<b>30分鐘</b>內有效,請在<b>30分鐘</b>內更改密碼,否則須重新申請</font><br>更改密碼連結:<a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?acc='.$acc_2.'&tmppw='.$tmp_pw.'">http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?acc='.$acc_2.'&tmppw='.$tmp_pw.'</a>';
+    $forget_pw_mail_body = $name.' 你好<br>員工編號(帳號):'.$acc_2.'<br>請使用以下連結更改密碼<br>可在有效時間內使用臨時密碼登入儀器管理系統<br>臨時密碼:'.$tmp_pw.'<br><font color=red>注意:臨時密碼與連結僅在<b>30分鐘</b>內有效,請在<b>30分鐘</b>內更改密碼,否則須重新申請</font><br><font color=red>注意:新密碼不允許以"<b>tmppw_</b>"為開頭</font><br>更改密碼連結:<a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?acc='.$acc_2.'&tmppw='.$tmp_pw.'">http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?acc='.$acc_2.'&tmppw='.$tmp_pw.'</a>';
     
     $sql2 = "insert into user_tmppw_tb(account,tmppw,application_time)values('".$acc_2."','".$tmp_pw."','".date("Y-m-d H:i:s",time())."')";
     mysqli_query($con,$sql2);
