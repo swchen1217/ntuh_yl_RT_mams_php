@@ -1,6 +1,8 @@
 <center>
 <h2>NTUH.YL 儀器管理系統</h2>
 <h3>更改登入密碼</h3>
+<meta http-equiv="Pragma" content="no-cache" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <?php
 require("config.php");
 
