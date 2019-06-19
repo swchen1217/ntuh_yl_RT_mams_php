@@ -102,7 +102,7 @@ if($mode=="forget_pw"){
     list($name,$acc_2)=mysqli_fetch_row($rs);
     $tmp_pw="tmppw_".substr(md5(uniqid(rand(), true)),0,8);
     
-    $forget_pw_mail_body = $name.' 你好<br>員工編號(帳號):'.$acc_2.'<br>請使用以下連結更改密碼<br>可在有效時間內使用臨時密碼登入儀器管理系統<br>臨時密碼:'.$tmp_pw.'<br><font color=red>注意:臨時密碼與連結僅在<b>30分鐘</b>內有效,請在<b>30分鐘</b>內更改密碼,否則須重新申請</font><br><font color=red>注意:新密碼不允許以"<b>tmppw_</b>"為開頭</font><br>更改密碼連結:<a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?acc='.$acc_2.'&tmppw='.$tmp_pw.'">http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?acc='.$acc_2.'&tmppw='.$tmp_pw.'</a>';
+    $forget_pw_mail_body = $name.' 你好<br>員工編號(帳號):'.$acc_2.'<br>請使用以下連結更改密碼<br>可在有效時間內使用臨時密碼登入醫療儀器管理系統<br>臨時密碼:'.$tmp_pw.'<br><font color=red>注意:臨時密碼與連結僅在<b>30分鐘</b>內有效,請在<b>30分鐘</b>內更改密碼,否則須重新申請</font><br><font color=red>注意:新密碼不允許以"<b>tmppw_</b>"為開頭</font><br>更改密碼連結:<a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?acc='.$acc_2.'&tmppw='.$tmp_pw.'">http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?acc='.$acc_2.'&tmppw='.$tmp_pw.'</a>';
     
     $sql2 = "insert into user_tmppw_tb(account,tmppw,application_time)values('".$acc_2."','".$tmp_pw."','".date("Y-m-d H:i:s",time())."')";
     mysqli_query($con,$sql2);
@@ -116,9 +116,8 @@ if($mode=="forget_pw"){
         $mail->SMTPAuth = true;
         $mail->Username = 'ntuhyl.mdms@gmail.com';
         $mail->Password = 'ntuhntuh';
-        $mail->setFrom('ntuhyl.mdms@gmail.com', 'NTUH.YL 儀器管理系統');
+        $mail->setFrom('ntuhyl.mdms@gmail.com', 'NTUH.YL 醫療儀器管理系統');
         $mail->addAddress($email);
-        $mail->addReplyTo('ntuhyl.mdms@gmail.com', 'NTUH.YL 儀器管理系統');
         $mail->isHTML(true);
         $mail->Subject = 'NTUH.YL 儀管系統 忘記密碼';
         $mail->Body= $forget_pw_mail_body;
