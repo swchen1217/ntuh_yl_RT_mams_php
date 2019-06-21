@@ -61,18 +61,25 @@ if($mode=="login_check"){
                 echo "tmppw_no_tmppw";
             else{
                 list($tmppw_r,$application_time_r)=mysqli_fetch_row($rs2);
-                if((strtotime(date("Y-m-d H:i:s",time())) - strtotime($application_time_r))<=1800){
-                    if($pw==$tmppw_r)
-                        echo "tmppw_ok";
-                    else
-                        echo "tmppw_error";
+				if($pw==$tmppw_r){
+					if((strtotime(date("Y-m-d H:i:s",time())) - strtotime($application_time_r))<=1800){
+						$sql3 = 'SELECT name FROM `user_tb` WHERE `account`="'.$acc.'"';
+                        $rs3=mysqli_query($con,$sql3);
+                        list($name_r)=mysqli_fetch_row($rs3);
+						echo 'ok_tmppw,'.$name_r;
+					}else
+						echo "tmppw_timeout";
                 }else
-                    echo "tmppw_timeout";
+					echo "tmppw_error";
             }
         }else{
             list($pw_r)=mysqli_fetch_row($rs);
-            if($pw_r==$pw)
-                echo "ok";
+            if($pw_r==$pw){
+				$sql4 = 'SELECT name FROM `user_tb` WHERE `account`="'.$acc.'"';
+				$rs4=mysqli_query($con,$sql4);
+                list($name_r)=mysqli_fetch_row($rs4);
+				echo 'ok,'.$name_r;
+			}
             else
                 echo "pw_error";
         }
