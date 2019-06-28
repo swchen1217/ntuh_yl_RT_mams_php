@@ -3,7 +3,7 @@ date_default_timezone_set('Asia/Taipei');
 $mysql_host = "localhost";
 $mysql_user = "swc";
 $mysql_pass = "chen1217";
-$mysql_db   = "ntuh_yl_rt_mdms";
+$mysql_db   = "ntuh.yl_mdms";
 $con = mysqli_connect($mysql_host,$mysql_user,$mysql_pass,$mysql_db);
 /*if (!$con) 
 	//die("連接錯誤: " . iconv('gbk', 'utf-8//IGNORE', mysqli_connect_error())); 
