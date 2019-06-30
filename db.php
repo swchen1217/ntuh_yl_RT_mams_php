@@ -41,13 +41,10 @@ if($mode=="sync_device_tb_upload"){
 			if(mysqli_num_rows($rs)==0){
 				$sql2 = 'INSERT INTO `device_tb` (`DID`,`category`,`model`,`number`,`user`,`position`,`status`,`LastModified`) VALUES ("'.$data[$i][$key[0]].'","'.$data[$i][$key[1]].'","'.$data[$i][$key[2]].'","'.$data[$i][$key[3]].'","'.$data[$i][$key[4]].'","'.$data[$i][$key[5]].'","'.$data[$i][$key[6]].'","'.$data[$i][$key[7]].'")';
 				$rs2=mysqli_query($con,$sql2);
-				echo '0'.$sql2;
 			}else{
-				$sql2 = 'INSERT INTO `device_tb` (`DID`,`category`,`model`,`number`,`user`,`position`,`status`,`LastModified`) VALUES ("'.$data[$i][$key[0]].'","'.$data[$i][$key[1]].'","'.$data[$i][$key[2]].'","'.$data[$i][$key[3]].'","'.$data[$i][$key[4]].'","'.$data[$i][$key[5]].'","'.$data[$i][$key[6]].'","'.$data[$i][$key[7]].'")';
+				$sql2 = 'UPDATE `device_tb` SET `DID`="'.$data[$i][$key[0]].'",`category`="'.$data[$i][$key[1]].'",`model`="'.$data[$i][$key[2]].'",`number`="'.$data[$i][$key[3]].'",`user`="'.$data[$i][$key[4]].'",`position`="'.$data[$i][$key[5]].'",`status`="'.$data[$i][$key[6]].'",`LastModified`="'.$data[$i][$key[7]].'"	 WHERE `DID`="'.$data[$i]["DID"].'"';
 				$rs2=mysqli_query($con,$sql2);
-				echo '1'.$sql2;
 			}
-			//echo $data[$i][$key[0]].'","'.$data[$i][$key[1]].'","'.$data[$i][$key[2]].'","'.$data[$i][$key[3]].'","'.$data[$i][$key[4]].'","'.$data[$i][$key[5]].'","'.$data[$i][$key[6]].'","'.$data[$i][$key[7]];
 		}
 	}
 	exit;
