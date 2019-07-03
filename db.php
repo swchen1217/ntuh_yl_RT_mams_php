@@ -33,7 +33,7 @@ if($mode=="sync_device_tb_download"){
 	exit;
 }
 if($mode=="GetSystem_tb"){
-	if($id==""){
+	if($id!=""){
 		$sql = 'SELECT value FROM `system_tb` WHERE `id`="'.$id.'"';
 		$rs=mysqli_query($con,$sql);
 		list($value_r)=mysqli_fetch_row($rs);
