@@ -12,6 +12,9 @@ if(isset($_REQUEST["LastModified"]))
 $josn_data = "";
 if(isset($_REQUEST["josn_data"]))
 	$josn_data=$_REQUEST["josn_data"];
+$id = "";
+if(isset($_REQUEST["id"]))
+	$id=$_REQUEST["id"];
 
 $key=array("DID","category","model","number","user","position","status","LastModified");
 
@@ -26,6 +29,15 @@ if($mode=="sync_device_tb_download"){
 			$ToJson[]=$row;
 		}
 		echo json_encode($ToJson);
+	}
+	exit;
+}
+if($mode=="GetSystem_tb"){
+	if($id==""){
+		$sql = 'SELECT value FROM `system_tb` WHERE `id`="'.$id.'"';
+		$rs=mysqli_query($con,$sql);
+		list($value_r)=mysqli_fetch_row($rs);
+		echo $value_r;
 	}
 	exit;
 }
