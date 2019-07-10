@@ -34,28 +34,21 @@ if($mode=="sync_device_tb_download"){
 }
 if($mode=="GetSystem_tb"){
 	if($id!=""){
-		$sql = 'SELECT value FROM `system_tb` WHERE `id`="'.$id.'"';
+		$sql = 'SELECT value FROM `system_tb` WHERE id="'.$id.'"';
 		$rs=mysqli_query($con,$sql);
 		list($value_r)=mysqli_fetch_row($rs);
 		echo $value_r;
 	}
 	exit;
 }
-/*if($mode=="sync_device_tb_upload"){
-	if($josn_data!=""){
-		$data=json_decode($josn_data, true);
-		for($i=0;$i<sizeof($data);$i++){
-			$sql = 'SELECT * FROM `device_tb` WHERE `DID`="'.$data[$i]["DID"].'"';
-			$rs=mysqli_query($con,$sql);
-			if(mysqli_num_rows($rs)==0){
-				$sql2 = 'INSERT INTO `device_tb` (`DID`,`category`,`model`,`number`,`user`,`position`,`status`,`LastModified`) VALUES ("'.$data[$i][$key[0]].'","'.$data[$i][$key[1]].'","'.$data[$i][$key[2]].'","'.$data[$i][$key[3]].'","'.$data[$i][$key[4]].'","'.$data[$i][$key[5]].'","'.$data[$i][$key[6]].'","'.$data[$i][$key[7]].'")';
-				$rs2=mysqli_query($con,$sql2);
-			}else{
-				$sql2 = 'UPDATE `device_tb` SET `DID`="'.$data[$i][$key[0]].'",`category`="'.$data[$i][$key[1]].'",`model`="'.$data[$i][$key[2]].'",`number`="'.$data[$i][$key[3]].'",`user`="'.$data[$i][$key[4]].'",`position`="'.$data[$i][$key[5]].'",`status`="'.$data[$i][$key[6]].'",`LastModified`="'.$data[$i][$key[7]].'"	 WHERE `DID`="'.$data[$i]["DID"].'"';
-				$rs2=mysqli_query($con,$sql2);
-			}
-		}
+if($mode=="sync_position_item_tb_download"){
+	$sql = 'SELECT * FROM `position_item_tb` WHERE 1';
+	$rs=mysqli_query($con,$sql);
+	$ToJson=array();
+	while($row=mysqli_fetch_assoc($rs)){
+		$ToJson[]=$row;
 	}
+	echo json_encode($ToJson);
 	exit;
-}*/
+}
 ?>
