@@ -15,6 +15,24 @@ if(isset($_REQUEST["josn_data"]))
 $id = "";
 if(isset($_REQUEST["id"]))
 	$id=$_REQUEST["id"];
+$acc = "";
+if(isset($_REQUEST["acc"]))
+	$acc=$_REQUEST["acc"];
+$pw = "";
+if(isset($_REQUEST["pw"]))
+	$pw=$_REQUEST["pw"];
+$DID = "";
+if(isset($_REQUEST["DID"]))
+	$DID=$_REQUEST["DID"];
+$user = "";
+if(isset($_REQUEST["user"]))
+	$user=$_REQUEST["user"];
+$position = "";
+if(isset($_REQUEST["position"]))
+	$position=$_REQUEST["position"];
+$status = "";
+if(isset($_REQUEST["status"]))
+	$status=$_REQUEST["status"];
 
 $key=array("DID","category","model","number","user","position","status","LastModified");
 
@@ -50,5 +68,10 @@ if($mode=="sync_position_item_tb_download"){
 	}
 	echo json_encode($ToJson);
 	exit;
+}
+if($mode=="update_device_tb_use"){
+	if($acc!="" && $pw!=""){
+		
+	}
 }
 ?>

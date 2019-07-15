@@ -49,40 +49,47 @@ if($mode=="connection_test"){
     echo "connection_ok";
 }
 if($mode=="login_check"){
-    $sql = 'SELECT `password` FROM `user_tb` WHERE `account`="'.$acc.'"';
+    $sql = 'SELECT `password`,`permission` FROM `user_tb` WHERE `account`="'.$acc.'"';
 	$rs=mysqli_query($con,$sql);
     if(mysqli_num_rows($rs) == 0){
         echo "no_acc";
     }else{
-        if(substr($pw,0,6)=="tmppw_"){
-            $sql2 = 'SELECT tmppw,application_time FROM `user_tmppw_tb` WHERE `account`="'.$acc.'" order by application_time desc';
-            $rs2=mysqli_query($con,$sql2);
-            if(mysqli_num_rows($rs2) == 0)
-                echo "tmppw_no_tmppw";
-            else{
-                list($tmppw_r,$application_time_r)=mysqli_fetch_row($rs2);
-				if($pw==$tmppw_r){
-					if((strtotime(date("Y-m-d H:i:s",time())) - strtotime($application_time_r))<=1800){
-						$sql3 = 'SELECT name FROM `user_tb` WHERE `account`="'.$acc.'"';
-                        $rs3=mysqli_query($con,$sql3);
-                        list($name_r)=mysqli_fetch_row($rs3);
-						echo 'ok_tmppw,'.$name_r;
+		list($pw_r,$permission_r_first)=mysqli_fetch_row($rs);
+		if($permission_r_first=="-1"){
+			echo "no_acc";
+		}else{
+			if(substr($pw,0,6)=="tmppw_"){
+				$sql2 = 'SELECT tmppw,application_time FROM `user_tmppw_tb` WHERE `account`="'.$acc.'" order by application_time desc';
+				$rs2=mysqli_query($con,$sql2);
+				if(mysqli_num_rows($rs2) == 0)
+					echo "tmppw_no_tmppw";
+				else{
+					list($tmppw_r,$application_time_r)=mysqli_fetch_row($rs2);
+					if($pw==$tmppw_r){
+						if((strtotime(date("Y-m-d H:i:s",time())) - strtotime($application_time_r))<=1800){
+							$sql3 = 'SELECT name,permission FROM `user_tb` WHERE `account`="'.$acc.'"';
+							$rs3=mysqli_query($con,$sql3);
+							list($name_r,$permission_r)=mysqli_fetch_row($rs3);
+							if($permission_r!="0")
+								echo 'ok_tmppw,'.$name_r.','.$permission_r;
+							else
+								echo 'no_enable';
+						}else
+							echo "tmppw_timeout";
 					}else
-						echo "tmppw_timeout";
-                }else
-					echo "tmppw_error";
-            }
-        }else{
-            list($pw_r)=mysqli_fetch_row($rs);
-            if($pw_r==$pw){
-				$sql4 = 'SELECT name FROM `user_tb` WHERE `account`="'.$acc.'"';
-				$rs4=mysqli_query($con,$sql4);
-                list($name_r)=mysqli_fetch_row($rs4);
-				echo 'ok,'.$name_r;
+						echo "tmppw_error";
+				}
+			}else{
+				if($pw_r==$pw){
+					$sql4 = 'SELECT name,permission FROM `user_tb` WHERE `account`="'.$acc.'"';
+					$rs4=mysqli_query($con,$sql4);
+					list($name_r,$permission_r)=mysqli_fetch_row($rs4);
+					echo 'ok,'.$name_r.','.$permission_r;
+				}
+				else
+					echo "pw_error";
 			}
-            else
-                echo "pw_error";
-        }
+		}
     }
     exit;
 }
