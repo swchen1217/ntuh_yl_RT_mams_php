@@ -49,8 +49,12 @@ if($mode=="connection_test"){
     echo "connection_ok";
 }
 if($mode=="login_check"){
-    $sql = 'SELECT `password`,`permission` FROM `user_tb` WHERE `account`="'.$acc.'"';
+    $sql = 'SELECT password,permission FROM `user_tb` WHERE `account`="'.$acc.'"';
 	$rs=mysqli_query($con,$sql);
+	if(!$rs){
+		echo("Error:".mysqli_error($con));
+		exit();
+	}
     if(mysqli_num_rows($rs) == 0){
         echo "no_acc";
     }else{
