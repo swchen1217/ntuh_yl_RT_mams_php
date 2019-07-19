@@ -88,7 +88,10 @@ if($mode=="login_check"){
 					$sql4 = 'SELECT name,permission FROM `user_tb` WHERE `account`="'.$acc.'"';
 					$rs4=mysqli_query($con,$sql4);
 					list($name_r,$permission_r)=mysqli_fetch_row($rs4);
-					echo 'ok,'.$name_r.','.$permission_r;
+					if($permission_r!="0")
+								echo 'ok,'.$name_r.','.$permission_r;
+							else
+								echo 'no_enable';
 				}
 				else
 					echo "pw_error";
