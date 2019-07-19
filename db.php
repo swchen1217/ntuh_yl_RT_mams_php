@@ -37,7 +37,7 @@ if(isset($_REQUEST["status"]))
 $key=array("DID","category","model","number","user","position","status","LastModified");
 
 if($mode=="sync_device_tb_download"){
-	if(UserCheck($acc,$pw,1){
+	if(UserCheck($acc,$pw,1)){
 		$sql = 'SELECT * FROM `device_tb` WHERE `LastModified` > "'.$LastModified.'"';
 		$rs=mysqli_query($con,$sql);
 		if(mysqli_num_rows($rs) == 0){
@@ -56,34 +56,47 @@ if($mode=="sync_device_tb_download"){
 }
 if($mode=="GetSystem_tb"){
 	if($id!=""){
-		$sql = 'SELECT value FROM `system_tb` WHERE id="'.$id.'"';
-		$rs=mysqli_query($con,$sql);
-		list($value_r)=mysqli_fetch_row($rs);
-		echo $value_r;
+		if(UserCheck($acc,$pw,1)){
+			$sql = 'SELECT value FROM `system_tb` WHERE id="'.$id.'"';
+			$rs=mysqli_query($con,$sql);
+			list($value_r)=mysqli_fetch_row($rs);
+			echo $value_r;
+		}else{
+			echo "user_error";
+		}
 	}
 	exit;
 }
 if($mode=="sync_position_item_tb_download"){
-	$sql = 'SELECT * FROM `position_item_tb` WHERE 1';
-	$rs=mysqli_query($con,$sql);
-	$ToJson=array();
-	while($row=mysqli_fetch_assoc($rs)){
-		$ToJson[]=$row;
+	if(UserCheck($acc,$pw,1)){
+		$sql = 'SELECT * FROM `position_item_tb` WHERE 1';
+		$rs=mysqli_query($con,$sql);
+		$ToJson=array();
+		while($row=mysqli_fetch_assoc($rs)){
+			$ToJson[]=$row;
+		}
+		echo json_encode($ToJson);
+	}else{
+		echo "user_error";
 	}
-	echo json_encode($ToJson);
 	exit;
 }
 if($mode=="update_device_tb_use"){
-	
+	if(UserCheck($acc,$pw,2)){
+		
+	}else{
+		echo "user_error";
+	}
 }
 function UserCheck($acc_in,$pw_in,$permission_in){
+	require("config.php");
 	if($acc_in!="" && $pw_in!=""){
 		$sql = 'SELECT password,permission FROM `user_tb` WHERE `account`="'.$acc_in.'"';
 		$rs=mysqli_query($con,$sql);
 		if(mysqli_num_rows($rs) == 0){
 			return false;
 		}else{
-			list($pw_r,$permission_r)=mysqli_fetch_row($rs);
+			list($pw_r,$permission_r_first)=mysqli_fetch_row($rs);
 			if($permission_r_first=="-1"){
 				return false;
 			}else{
@@ -123,6 +136,7 @@ function UserCheck($acc_in,$pw_in,$permission_in){
 				}
 			}
 		}
-	}
+	}else
+		return false;
 }
 ?>
