@@ -83,8 +83,9 @@ if($mode=="sync_position_item_tb_download"){
 }
 if($mode=="update_device_tb_use"){
 	if(UserCheck($acc,$pw,2)){
-		if($DID!="" && $user!="" && $position!="" && $status!=""){
-			
+		if($DID!="" && $user!="" && $position!=""){
+			$sql = 'SELECT password,permission FROM `user_tb` WHERE `account`="'.$acc_in.'"';
+			$rs=mysqli_query($con,$sql);
 		}
 	}else{
 		echo "user_error";
