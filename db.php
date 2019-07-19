@@ -83,7 +83,9 @@ if($mode=="sync_position_item_tb_download"){
 }
 if($mode=="update_device_tb_use"){
 	if(UserCheck($acc,$pw,2)){
-		
+		if($DID!="" && $user!="" && $position!="" && $status!=""){
+			
+		}
 	}else{
 		echo "user_error";
 	}
