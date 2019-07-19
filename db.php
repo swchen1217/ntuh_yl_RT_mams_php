@@ -37,17 +37,20 @@ if(isset($_REQUEST["status"]))
 $key=array("DID","category","model","number","user","position","status","LastModified");
 
 if($mode=="sync_device_tb_download"){
-	if(UserCheck($acc,$pw,)
-	$sql = 'SELECT * FROM `device_tb` WHERE `LastModified` > "'.$LastModified.'"';
-	$rs=mysqli_query($con,$sql);
-	if(mysqli_num_rows($rs) == 0){
-		echo "no_data";
-	}else{
-		$ToJson=array();
-		while($row=mysqli_fetch_assoc($rs)){
-			$ToJson[]=$row;
+	if(UserCheck($acc,$pw,1){
+		$sql = 'SELECT * FROM `device_tb` WHERE `LastModified` > "'.$LastModified.'"';
+		$rs=mysqli_query($con,$sql);
+		if(mysqli_num_rows($rs) == 0){
+			echo "no_data";
+		}else{
+			$ToJson=array();
+			while($row=mysqli_fetch_assoc($rs)){
+				$ToJson[]=$row;
+			}
+			echo json_encode($ToJson);
 		}
-		echo json_encode($ToJson);
+	}else{
+		echo "user_error";
 	}
 	exit;
 }
@@ -110,7 +113,10 @@ function UserCheck($acc_in,$pw_in,$permission_in){
 						$sql4 = 'SELECT name,permission FROM `user_tb` WHERE `account`="'.$acc_in.'"';
 						$rs4=mysqli_query($con,$sql4);
 						list($name_r,$permission_r)=mysqli_fetch_row($rs4);
-						return true;
+						if((int)$permission_r>=$permission_in)
+							return true;
+						else
+							return false;
 					}
 					else
 						return false;

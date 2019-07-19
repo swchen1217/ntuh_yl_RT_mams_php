@@ -89,9 +89,9 @@ if($mode=="login_check"){
 					$rs4=mysqli_query($con,$sql4);
 					list($name_r,$permission_r)=mysqli_fetch_row($rs4);
 					if($permission_r!="0")
-								echo 'ok,'.$name_r.','.$permission_r;
-							else
-								echo 'no_enable';
+						echo 'ok,'.$name_r.','.$permission_r;
+					else
+						echo 'no_enable';
 				}
 				else
 					echo "pw_error";
