@@ -135,7 +135,7 @@ if($mode=="forget_pw"){
         $mail->Charset='UTF-8';
         $mail->Host = 'ssl://smtp.gmail.com:465';
         $mail->SMTPAuth = true;
-        
+        require("mail_config.php");
         $mail->setFrom('ntuhyl.mdms@gmail.com', 'NTUH.YL 醫療儀器管理系統');
         $mail->addAddress($email);
         $mail->isHTML(true);
