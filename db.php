@@ -84,7 +84,7 @@ if($mode=="sync_position_item_tb_download"){
 if($mode=="update_device_tb_use"){
 	if(UserCheck($acc,$pw,2)){
 		if($DID!="" && $user!="" && $position!=""){
-			$sql = 'UPDATE `device_tb` SET `user`="'.$user.'",`position`="'.$position.'",`status`="2",`LastModified`="'.date("Y-m-d H:i:s",time()).'" WHERE `DID`="'.$DID.'"';
+			$sql = 'UPDATE `device_tb` SET `user`="'.$user.'",`position`="'.$position.'",`status`="1",`LastModified`="'.date("Y-m-d H:i:s",time()).'" WHERE `DID`="'.$DID.'"';
 			$rs=mysqli_query($con,$sql);
 		}
 	}else{
