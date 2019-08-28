@@ -91,6 +91,7 @@ if($mode=="update_device_tb_use"){
 	}else{
 		echo "user_error";
 	}
+	exit;
 }
 if($mode=="update_device_tb_storeroom"){
 	if(UserCheck($acc,$pw,2)){
@@ -102,6 +103,7 @@ if($mode=="update_device_tb_storeroom"){
 	}else{
 		echo "user_error";
 	}
+	exit;
 }
 function UserCheck($acc_in,$pw_in,$permission_in){
 	require("config.php");
