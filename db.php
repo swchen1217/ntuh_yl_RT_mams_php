@@ -86,6 +86,7 @@ if($mode=="update_device_tb_use"){
 		if($DID!="" && $user!="" && $position!=""){
 			$sql = 'UPDATE `device_tb` SET `user`="'.$user.'",`position`="'.$position.'",`status`="1",`LastModified`="'.date("Y-m-d H:i:s",time()).'" WHERE `DID`="'.$DID.'"';
 			$rs=mysqli_query($con,$sql);
+			echo "ok";
 		}
 	}else{
 		echo "user_error";
@@ -96,6 +97,7 @@ if($mode=="update_device_tb_storeroom"){
 		if($DID!="" && $position!=""){
 			$sql = 'UPDATE `device_tb` SET `user`="-",`position`="*'.$position.'",`status`="2",`LastModified`="'.date("Y-m-d H:i:s",time()).'" WHERE `DID`="'.$DID.'"';
 			$rs=mysqli_query($con,$sql);
+			echo "ok";
 		}
 	}else{
 		echo "user_error";
