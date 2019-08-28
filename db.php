@@ -91,6 +91,16 @@ if($mode=="update_device_tb_use"){
 		echo "user_error";
 	}
 }
+if($mode=="update_device_tb_storeroom"){
+	if(UserCheck($acc,$pw,2)){
+		if($DID!="" && $position!=""){
+			$sql = 'UPDATE `device_tb` SET `user`="-",`position`="S-'.$position.'",`status`="2",`LastModified`="'.date("Y-m-d H:i:s",time()).'" WHERE `DID`="'.$DID.'"';
+			$rs=mysqli_query($con,$sql);
+		}
+	}else{
+		echo "user_error";
+	}
+}
 function UserCheck($acc_in,$pw_in,$permission_in){
 	require("config.php");
 	if($acc_in!="" && $pw_in!=""){
