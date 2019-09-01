@@ -72,10 +72,10 @@
 
                                 echo "<span style=\"color: blue; \"><b>成功:已成功更改密碼</b></span>";
                             } else {
-                                echo '<span style="color: red; "><b>錯誤:新密碼不允許以"tmppw_"為開頭<br>請重新輸入</b></span><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?acc=' . $acc . '&tmppw=' . $tmppw . '">回上頁</a>';
+                                echo '<span style="color: red; "><b>錯誤:新密碼不允許以"tmppw_"為開頭<br>請重新輸入</b></span><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_api/change_pw.php?acc=' . $acc . '&tmppw=' . $tmppw . '">回上頁</a>';
                             }
                         } else {
-                            echo '<span style="color: red; "><b>錯誤:新密碼與確認新密碼不相符<br>請重新輸入</b></span><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?acc=' . $acc . '&tmppw=' . $tmppw . '">回上頁</a>';
+                            echo '<span style="color: red; "><b>錯誤:新密碼與確認新密碼不相符<br>請重新輸入</b></span><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_api/change_pw.php?acc=' . $acc . '&tmppw=' . $tmppw . '">回上頁</a>';
                         }
                     } else {
                         $sql3 = 'SELECT email FROM `user_tb` WHERE `account`=:acc';
@@ -83,7 +83,7 @@
                         $rs3->bindValue(':acc', $acc, PDO::PARAM_STR);
                         $rs3->execute();
                         list($email) = $rs3->fetch(PDO::FETCH_NUM);
-                        echo '<span style="color: red; "><b>錯誤:此臨時密碼已超過有效時間<br>請重新申請</b></span><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/user.php?mode=forget_pw&email=' . $email . '&redirection=true">重新申請</a>';
+                        echo '<span style="color: red; "><b>錯誤:此臨時密碼已超過有效時間<br>請重新申請</b></span><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_api/user.php?mode=forget_pw&email=' . $email . '&redirection=true">重新申請</a>';
                     }
                 }
             } else {
@@ -92,7 +92,7 @@
                 $rs5->bindValue(':input_acc', $input_acc, PDO::PARAM_STR);
                 $rs5->execute();
                 if ($rs5->rowCount()== 0) {
-                    echo '<span style="color: red; "><b>錯誤:此員工編號尚未註冊<br>請重新輸入</b></span><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php">回上頁</a>';
+                    echo '<span style="color: red; "><b>錯誤:此員工編號尚未註冊<br>請重新輸入</b></span><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_api/change_pw.php">回上頁</a>';
                 } else {
                     list($db_acc, $db_pw) = $rs5->fetch(PDO::FETCH_NUM);
                     if ($input_old_pw == $db_pw) {
@@ -111,13 +111,13 @@
 
                                 echo "<span style=\"color: blue; \"><b>成功:已成功更改密碼</b></span>";
                             } else {
-                                echo '<span style="color: red; "><b>錯誤:新密碼不允許以"tmppw_"為開頭<br>請重新輸入</b></span><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php">回上頁</a>';
+                                echo '<span style="color: red; "><b>錯誤:新密碼不允許以"tmppw_"為開頭<br>請重新輸入</b></span><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_api/change_pw.php">回上頁</a>';
                             }
                         } else {
-                            echo '<span style="color: red; "><b>錯誤:新密碼與確認新密碼不相符<br>請重新輸入</b></span><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php">回上頁</a>';
+                            echo '<span style="color: red; "><b>錯誤:新密碼與確認新密碼不相符<br>請重新輸入</b></span><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_api/change_pw.php">回上頁</a>';
                         }
                     } else {
-                        echo '<span style="color: red; "><b>錯誤:原密碼輸入錯誤<br>請重新輸入</b></span><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php">回上頁</a>';
+                        echo '<span style="color: red; "><b>錯誤:原密碼輸入錯誤<br>請重新輸入</b></span><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_api/change_pw.php">回上頁</a>';
                     }
                 }
             }
