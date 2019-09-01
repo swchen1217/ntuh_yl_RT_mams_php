@@ -1,6 +1,6 @@
 <?php
 
-require("config2.php");
+require("config.php");
 require("request.php");
 
 $acc=request("acc");
