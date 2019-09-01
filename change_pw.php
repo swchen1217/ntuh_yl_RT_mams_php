@@ -47,6 +47,7 @@
             echo '<span style="color: red; "><b>注意:新密碼不允許以"tmppw_"為開頭</b></span>';
         } else {
             if ($tmppw != "") {
+                // TODO
                 $sql = 'SELECT application_time FROM `user_tmppw_tb` WHERE `account`="' . $acc . '" and `tmppw`="' . $tmppw . '" order by application_time desc';
                 $rs = mysqli_query($con, $sql);
                 if (mysqli_num_rows($rs) == 0) {
@@ -56,6 +57,7 @@
                     if ((strtotime(date("Y-m-d H:i:s", time())) - strtotime($time)) <= 1800) {
                         if ($input_new_pw == $input_new_pw_re) {
                             if (substr($input_new_pw, 0, 6) != "tmppw_") {
+                                // TODO
                                 $sql2 = 'UPDATE `user_tb` SET `password`="' . $input_new_pw . '" WHERE `account`="' . $acc . '"';
                                 mysqli_query($con, $sql2);
                                 $sql4 = 'DELETE FROM `user_tmppw_tb`WHERE `account`="' . $acc . '"';
@@ -68,6 +70,7 @@
                             echo '<span style="color: red; "><b>錯誤:新密碼與確認新密碼不相符<br>請重新輸入</b></span><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?acc=' . $acc . '&tmppw=' . $tmppw . '">回上頁</a>';
                         }
                     } else {
+                        // TODO
                         $sql3 = 'SELECT email FROM `user_tb` WHERE `account`="' . $acc . '"';
                         $rs3 = mysqli_query($con, $sql3);
                         list($email) = mysqli_fetch_row($rs3);
@@ -75,6 +78,7 @@
                     }
                 }
             } else {
+                // TODO
                 $sql5 = 'SELECT account,password FROM `user_tb` WHERE `account`="' . $input_acc . '"';
                 $rs5 = mysqli_query($con, $sql5);
                 if (mysqli_num_rows($rs5) == 0) {
@@ -84,6 +88,7 @@
                     if ($input_old_pw == $db_pw) {
                         if ($input_new_pw == $input_new_pw_re) {
                             if (substr($input_new_pw, 0, 6) != "tmppw_") {
+                                // TODO
                                 $sql6 = 'UPDATE `user_tb` SET `password`="' . $input_new_pw . '" WHERE `account`="' . $input_acc . '"';
                                 mysqli_query($con, $sql6);
                                 $sql7 = 'DELETE FROM `user_tmppw_tb`WHERE `account`="' . $input_acc . '"';
