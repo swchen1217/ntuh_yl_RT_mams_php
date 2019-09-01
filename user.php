@@ -3,7 +3,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require("config2.php");
+require("config.php");
 require("request.php");
 
 require('./PHPMailer/src/Exception.php');
