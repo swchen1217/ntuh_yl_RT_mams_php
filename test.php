@@ -1,8 +1,9 @@
 <?php
 
 require("config2.php");
+require("request.php");
 
-$acc=requst("acc");
+$acc=request("acc");
 
 $sql = 'SELECT * FROM user_tb where account=:acc';
 $rs = $db->prepare($sql);
