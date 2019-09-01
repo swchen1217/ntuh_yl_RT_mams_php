@@ -1,6 +1,6 @@
 <?php
 // API
-require("config2.php");
+require("config.php");
 require("request.php");
 
 mb_internal_encoding('UTF-8');
@@ -103,7 +103,7 @@ if ($mode == "update_device_tb_storeroom") {
 }
 function UserCheck($acc_in, $pw_in, $permission_in, PDO $mDB)
 {
-    //require("config2.php");
+    //require("config.php");
     if ($acc_in != "" && $pw_in != "") {
         $sql = 'SELECT password,permission FROM `user_tb` WHERE `account`=:acc_in';
         $rs = $mDB->prepare($sql);
