@@ -1,5 +1,5 @@
 <?php
-function requst($key)
+function request($key)
 {
     $tmp = filter_input(INPUT_POST, $key);
     if (!$tmp) $tmp = filter_input(INPUT_GET, $key);
