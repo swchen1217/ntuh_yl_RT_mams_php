@@ -55,7 +55,7 @@ if ($mode == "login_check") {
                 $rs2 = $db->prepare($sql2);
                 $rs2->bindValue(':acc', $acc, PDO::PARAM_STR);
                 $rs2->execute();
-                if ($rs2->rowCount()== 0)
+                if ($rs2->rowCount() == 0)
                     echo "tmppw_no_tmppw";
                 else {
                     list($tmppw_r, $application_time_r) = $rs2->fetch(PDO::FETCH_NUM);
