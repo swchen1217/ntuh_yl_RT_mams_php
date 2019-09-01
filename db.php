@@ -41,10 +41,11 @@ if($mode=="sync_device_tb_download"){
 if($mode=="GetSystem_tb"){
 	if($id!=""){
 		if(UserCheck($acc,$pw,1)){
-            // TODO
-			$sql = 'SELECT value FROM `system_tb` WHERE id="'.$id.'"';
-			$rs=mysqli_query($con,$sql);
-			list($value_r)=mysqli_fetch_row($rs);
+			$sql = 'SELECT value FROM `system_tb` WHERE id=:id';
+            $rs = $db->prepare($sql);
+            $rs->bindValue(':id', $id, PDO::PARAM_STR);
+            $rs->execute();
+			list($value_r)=$rs->fetch(PDO::FETCH_NUM);
 			echo $value_r;
 		}else{
 			echo "user_error";
@@ -54,11 +55,11 @@ if($mode=="GetSystem_tb"){
 }
 if($mode=="sync_position_item_tb_download"){
 	if(UserCheck($acc,$pw,1)){
-        // TODO
 		$sql = 'SELECT * FROM `position_item_tb` WHERE 1';
-		$rs=mysqli_query($con,$sql);
+        $rs = $db->prepare($sql);
+        $rs->execute();
 		$ToJson=array();
-		while($row=mysqli_fetch_assoc($rs)){
+		while($row=$rs->fetch(PDO::FETCH_ASSOC)){
 			$ToJson[]=$row;
 		}
 		echo json_encode($ToJson);
@@ -71,8 +72,13 @@ if($mode=="update_device_tb_use"){
 	if(UserCheck($acc,$pw,2)){
 		if($DID!="" && $user!="" && $position!=""){
 		    // TODO
-			$sql = 'UPDATE `device_tb` SET `user`="'.$user.'",`position`="'.$position.'",`status`="1",`LastModified`="'.date("Y-m-d H:i:s",time()).'" WHERE `DID`="'.$DID.'"';
-			$rs=mysqli_query($con,$sql);
+			$sql = "UPDATE `device_tb` SET `user`=:user,`position`=:position,`status`='1',`LastModified`=:LastModified WHERE `DID`=:DID";
+            $rs = $db->prepare($sql);
+            $rs->bindValue(':user', $user, PDO::PARAM_STR);
+            $rs->bindValue(':position', $position, PDO::PARAM_STR);
+            $rs->bindValue(':LastModified', date("Y-m-d H:i:s",time()), PDO::PARAM_STR);
+            $rs->bindValue(':DID', $DID, PDO::PARAM_STR);
+            $rs->execute();
 			echo "ok";
 		}
 	}else{
