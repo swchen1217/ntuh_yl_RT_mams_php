@@ -37,31 +37,35 @@ if ($mode == "connection_test") {
     echo "connection_ok";
 }
 if ($mode == "login_check") {
-    $sql = 'SELECT password,permission FROM `user_tb` WHERE `account`="' . $acc . '"';
-    $rs = mysqli_query($con, $sql);
-    if (!$rs) {
-        echo("Error:" . mysqli_error($con));
-        exit();
-    }
-    if (mysqli_num_rows($rs) == 0) {
+    $sql = "SELECT password,permission FROM `user_tb` WHERE `account`=:acc";
+    $rs = $db->prepare($sql);
+    $rs->bindValue(':acc', $acc, PDO::PARAM_STR);
+    $rs->execute();
+    if ($rs->rowCount() == 0) {
         echo "no_acc";
+        $db = null;
+        exit;
     } else {
-        list($pw_r, $permission_r_first) = mysqli_fetch_row($rs);
+        list($pw_r, $permission_r_first) = $rs->fetch(PDO::FETCH_NUM);
         if ($permission_r_first == "-1") {
             echo "no_acc";
         } else {
             if (substr($pw, 0, 6) == "tmppw_") {
-                $sql2 = 'SELECT tmppw,application_time FROM `user_tmppw_tb` WHERE `account`="' . $acc . '" order by application_time desc';
-                $rs2 = mysqli_query($con, $sql2);
-                if (mysqli_num_rows($rs2) == 0)
+                $sql2 = 'SELECT tmppw,application_time FROM `user_tmppw_tb` WHERE `account`=:acc order by application_time desc';
+                $rs2 = $db->prepare($sql2);
+                $rs2->bindValue(':acc', $acc, PDO::PARAM_STR);
+                $rs2->execute();
+                if ($rs2->rowCount()== 0)
                     echo "tmppw_no_tmppw";
                 else {
-                    list($tmppw_r, $application_time_r) = mysqli_fetch_row($rs2);
+                    list($tmppw_r, $application_time_r) = $rs2->fetch(PDO::FETCH_NUM);
                     if ($pw == $tmppw_r) {
                         if ((strtotime(date("Y-m-d H:i:s", time())) - strtotime($application_time_r)) <= 1800) {
-                            $sql3 = 'SELECT name,permission FROM `user_tb` WHERE `account`="' . $acc . '"';
-                            $rs3 = mysqli_query($con, $sql3);
-                            list($name_r, $permission_r) = mysqli_fetch_row($rs3);
+                            $sql3 = 'SELECT name,permission FROM `user_tb` WHERE `account`=:acc';
+                            $rs3 = $db->prepare($sql3);
+                            $rs3->bindValue(':acc', $acc, PDO::PARAM_STR);
+                            $rs3->execute();
+                            list($name_r, $permission_r) = $rs3->fetch(PDO::FETCH_NUM);
                             if ($permission_r != "0")
                                 echo 'ok_tmppw,' . $name_r . ',' . $permission_r;
                             else
@@ -73,9 +77,11 @@ if ($mode == "login_check") {
                 }
             } else {
                 if ($pw_r == $pw) {
-                    $sql4 = 'SELECT name,permission FROM `user_tb` WHERE `account`="' . $acc . '"';
-                    $rs4 = mysqli_query($con, $sql4);
-                    list($name_r, $permission_r) = mysqli_fetch_row($rs4);
+                    $sql4 = 'SELECT name,permission FROM `user_tb` WHERE `account`="acc';
+                    $rs4 = $db->prepare($sql4);
+                    $rs4->bindValue(':acc', $acc, PDO::PARAM_STR);
+                    $rs4->execute();
+                    list($name_r, $permission_r) = $rs4->fetch(PDO::FETCH_NUM);
                     if ($permission_r != "0")
                         echo 'ok,' . $name_r . ',' . $permission_r;
                     else
@@ -88,16 +94,20 @@ if ($mode == "login_check") {
     exit;
 }
 if ($mode == "get_user_name") {
-    $sql = 'SELECT `name` FROM `user_tb` WHERE `account`="' . $acc . '"';
-    $rs = mysqli_query($con, $sql);
-    list($name) = mysqli_fetch_row($rs);
+    $sql = 'SELECT `name` FROM `user_tb` WHERE `account`=:acc';
+    $rs = $db->prepare($sql);
+    $rs->bindValue(':acc', $acc, PDO::PARAM_STR);
+    $rs->execute();
+    list($name) = $rs->fetch(PDO::FETCH_NUM);
     echo $name;
     exit;
 }
 if ($mode == "check_has_email") {
-    $sql = 'SELECT * FROM `user_tb` WHERE `email`="' . $email . '"';
-    $rs = mysqli_query($con, $sql);
-    if (mysqli_num_rows($rs) == 0) {
+    $sql = 'SELECT * FROM `user_tb` WHERE `email`=:email';
+    $rs = $db->prepare($sql);
+    $rs->bindValue(':email', $email, PDO::PARAM_STR);
+    $rs->execute();
+    if ($rs->rowCount() == 0) {
         echo "no_email";
     } else {
         echo "has_email";
@@ -105,15 +115,21 @@ if ($mode == "check_has_email") {
     exit;
 }
 if ($mode == "forget_pw") {
-    $sql = 'SELECT name,account FROM `user_tb` WHERE `email`="' . $email . '"';
-    $rs = mysqli_query($con, $sql);
-    list($name, $acc_2) = mysqli_fetch_row($rs);
+    $sql = 'SELECT name,account FROM `user_tb` WHERE `email`=:email';
+    $rs = $db->prepare($sql);
+    $rs->bindValue(':email', $email, PDO::PARAM_STR);
+    $rs->execute();
+    list($name, $acc_2) = $rs->fetch(PDO::FETCH_NUM);
     $tmp_pw = "tmppw_" . substr(md5(uniqid(rand(), true)), 0, 8);
 
     $forget_pw_mail_body = $name . ' 你好<br>員工編號(帳號):' . $acc_2 . '<br>請使用以下連結更改密碼<br>可在有效時間內使用臨時密碼登入醫療儀器管理系統<br>臨時密碼:' . $tmp_pw . '<br><font color=red>注意:臨時密碼與連結僅在<b>30分鐘</b>內有效,請在<b>30分鐘</b>內更改密碼,否則須重新申請</font><br><font color=red>注意:新密碼不允許以"<b>tmppw_</b>"為開頭</font><br>更改密碼連結:<a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?acc=' . $acc_2 . '&tmppw=' . $tmp_pw . '">http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?acc=' . $acc_2 . '&tmppw=' . $tmp_pw . '</a>';
 
-    $sql2 = "insert into user_tmppw_tb(account,tmppw,application_time)values('" . $acc_2 . "','" . $tmp_pw . "','" . date("Y-m-d H:i:s", time()) . "')";
-    mysqli_query($con, $sql2);
+    $sql2 = "insert into user_tmppw_tb(account,tmppw,application_time)values(:acc_2,:tmp_pw,:d)";
+    $rs2 = $db->prepare($sql2);
+    $rs2->bindValue(':acc_2', $acc_2, PDO::PARAM_STR);
+    $rs2->bindValue(':tmp_pw', $tmp_pw, PDO::PARAM_STR);
+    $rs2->bindValue(':d', date("Y-m-d H:i:s", time()), PDO::PARAM_STR);
+    $rs2->execute();
 
     $mail = new PHPMailer(true);
     try {
