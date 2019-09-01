@@ -94,7 +94,6 @@ if ($mode == "update_device_tb_storeroom") {
             $rs->bindValue(':LastModified', date("Y-m-d H:i:s", time()), PDO::PARAM_STR);
             $rs->bindValue(':DID', $DID, PDO::PARAM_STR);
             $rs->execute();
-            $rs = mysqli_query($con, $sql);
             echo "ok";
         }
     } else {
