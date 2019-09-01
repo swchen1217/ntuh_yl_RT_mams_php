@@ -13,5 +13,4 @@ $rs->execute();
 while ($row = $rs->fetch(PDO::FETCH_NUM)) {
     echo $row[1] . "<br>";
 }
-
 ?>
