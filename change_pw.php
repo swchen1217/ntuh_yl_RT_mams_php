@@ -48,20 +48,29 @@
         } else {
             if ($tmppw != "") {
                 // TODO
-                $sql = 'SELECT application_time FROM `user_tmppw_tb` WHERE `account`="' . $acc . '" and `tmppw`="' . $tmppw . '" order by application_time desc';
-                $rs = mysqli_query($con, $sql);
-                if (mysqli_num_rows($rs) == 0) {
+                $sql = 'SELECT application_time FROM `user_tmppw_tb` WHERE `account`=:acc and `tmppw`=:tmppw order by application_time desc';
+                $rs = $db->prepare($sql);
+                $rs->bindValue(':acc', $acc, PDO::PARAM_STR);
+                $rs->bindValue(':tmppw', $tmppw, PDO::PARAM_STR);
+                $rs->execute();
+                if ($rs->rowCount() == 0) {
                     echo "<span style=\"color: red; \"><b>錯誤:先前已完成修改</b></span>";
                 } else {
-                    list($time) = mysqli_fetch_row($rs);
+                    list($time) = $rs->fetch(PDO::FETCH_NUM);
                     if ((strtotime(date("Y-m-d H:i:s", time())) - strtotime($time)) <= 1800) {
                         if ($input_new_pw == $input_new_pw_re) {
                             if (substr($input_new_pw, 0, 6) != "tmppw_") {
-                                // TODO
-                                $sql2 = 'UPDATE `user_tb` SET `password`="' . $input_new_pw . '" WHERE `account`="' . $acc . '"';
-                                mysqli_query($con, $sql2);
-                                $sql4 = 'DELETE FROM `user_tmppw_tb`WHERE `account`="' . $acc . '"';
-                                mysqli_query($con, $sql4);
+                                $sql2 = 'UPDATE `user_tb` SET `password`=:input_new_pw WHERE `account`=:acc';
+                                $rs2 = $db->prepare($sql2);
+                                $rs2->bindValue(':input_new_pw', $input_new_pw, PDO::PARAM_STR);
+                                $rs2->bindValue(':acc', $acc, PDO::PARAM_STR);
+                                $rs2->execute();
+
+                                $sql4 = 'DELETE FROM `user_tmppw_tb`WHERE `account`=:acc';
+                                $rs4 = $db->prepare($sql4);
+                                $rs4->bindValue(':acc', $acc, PDO::PARAM_STR);
+                                $rs4->execute();
+
                                 echo "<span style=\"color: blue; \"><b>成功:已成功更改密碼</b></span>";
                             } else {
                                 echo '<span style="color: red; "><b>錯誤:新密碼不允許以"tmppw_"為開頭<br>請重新輸入</b></span><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?acc=' . $acc . '&tmppw=' . $tmppw . '">回上頁</a>';
@@ -70,29 +79,37 @@
                             echo '<span style="color: red; "><b>錯誤:新密碼與確認新密碼不相符<br>請重新輸入</b></span><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?acc=' . $acc . '&tmppw=' . $tmppw . '">回上頁</a>';
                         }
                     } else {
-                        // TODO
-                        $sql3 = 'SELECT email FROM `user_tb` WHERE `account`="' . $acc . '"';
-                        $rs3 = mysqli_query($con, $sql3);
-                        list($email) = mysqli_fetch_row($rs3);
+                        $sql3 = 'SELECT email FROM `user_tb` WHERE `account`=:acc';
+                        $rs3 = $db->prepare($sql3);
+                        $rs3->bindValue(':acc', $acc, PDO::PARAM_STR);
+                        $rs3->execute();
+                        list($email) = $rs3->fetch(PDO::FETCH_NUM);
                         echo '<span style="color: red; "><b>錯誤:此臨時密碼已超過有效時間<br>請重新申請</b></span><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/user.php?mode=forget_pw&email=' . $email . '&redirection=true">重新申請</a>';
                     }
                 }
             } else {
-                // TODO
-                $sql5 = 'SELECT account,password FROM `user_tb` WHERE `account`="' . $input_acc . '"';
-                $rs5 = mysqli_query($con, $sql5);
-                if (mysqli_num_rows($rs5) == 0) {
+                $sql5 = 'SELECT account,password FROM `user_tb` WHERE `account`=:input_acc';
+                $rs5 = $db->prepare($sql5);
+                $rs5->bindValue(':input_acc', $input_acc, PDO::PARAM_STR);
+                $rs5->execute();
+                if ($rs5->rowCount()== 0) {
                     echo '<span style="color: red; "><b>錯誤:此員工編號尚未註冊<br>請重新輸入</b></span><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php">回上頁</a>';
                 } else {
-                    list($db_acc, $db_pw) = mysqli_fetch_row($rs5);
+                    list($db_acc, $db_pw) = $rs5->fetch(PDO::FETCH_NUM);
                     if ($input_old_pw == $db_pw) {
                         if ($input_new_pw == $input_new_pw_re) {
                             if (substr($input_new_pw, 0, 6) != "tmppw_") {
-                                // TODO
-                                $sql6 = 'UPDATE `user_tb` SET `password`="' . $input_new_pw . '" WHERE `account`="' . $input_acc . '"';
-                                mysqli_query($con, $sql6);
-                                $sql7 = 'DELETE FROM `user_tmppw_tb`WHERE `account`="' . $input_acc . '"';
-                                mysqli_query($con, $sql7);
+                                $sql6 = 'UPDATE `user_tb` SET `password`=:input_new_pw WHERE `account`=:input_acc';
+                                $rs6 = $db->prepare($sql6);
+                                $rs6->bindValue(':input_new_pw', $input_new_pw, PDO::PARAM_STR);
+                                $rs6->bindValue(':input_acc', $input_acc, PDO::PARAM_STR);
+                                $rs6->execute();
+
+                                $sql7 = 'DELETE FROM `user_tmppw_tb`WHERE `account`=:input_acc';
+                                $rs7 = $db->prepare($sql7);
+                                $rs7->bindValue(':input_acc', $input_acc, PDO::PARAM_STR);
+                                $rs7->execute();
+
                                 echo "<span style=\"color: blue; \"><b>成功:已成功更改密碼</b></span>";
                             } else {
                                 echo '<span style="color: red; "><b>錯誤:新密碼不允許以"tmppw_"為開頭<br>請重新輸入</b></span><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php">回上頁</a>';
