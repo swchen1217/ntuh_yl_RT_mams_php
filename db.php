@@ -1,7 +1,7 @@
 <?php
 // API
 require("config2.php");
-require("request.php.php");
+require("request.php");
 
 mb_internal_encoding('UTF-8');
 
