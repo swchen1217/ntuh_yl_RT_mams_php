@@ -91,7 +91,7 @@
                 $rs5 = $db->prepare($sql5);
                 $rs5->bindValue(':input_acc', $input_acc, PDO::PARAM_STR);
                 $rs5->execute();
-                if ($rs5->rowCount()== 0) {
+                if ($rs5->rowCount() == 0) {
                     echo '<span style="color: red; "><b>錯誤:此員工編號尚未註冊<br>請重新輸入</b></span><br><a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_api/change_pw.php">回上頁</a>';
                 } else {
                     list($db_acc, $db_pw) = $rs5->fetch(PDO::FETCH_NUM);
