@@ -77,7 +77,7 @@ if ($mode == "login_check") {
                 }
             } else {
                 if ($pw_r == $pw) {
-                    $sql4 = 'SELECT name,permission FROM `user_tb` WHERE `account`="acc';
+                    $sql4 = 'SELECT name,permission FROM `user_tb` WHERE `account`=:acc';
                     $rs4 = $db->prepare($sql4);
                     $rs4->bindValue(':acc', $acc, PDO::PARAM_STR);
                     $rs4->execute();
