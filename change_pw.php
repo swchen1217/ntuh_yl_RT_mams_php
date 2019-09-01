@@ -47,7 +47,6 @@
             echo '<span style="color: red; "><b>注意:新密碼不允許以"tmppw_"為開頭</b></span>';
         } else {
             if ($tmppw != "") {
-                // TODO
                 $sql = 'SELECT application_time FROM `user_tmppw_tb` WHERE `account`=:acc and `tmppw`=:tmppw order by application_time desc';
                 $rs = $db->prepare($sql);
                 $rs->bindValue(':acc', $acc, PDO::PARAM_STR);
