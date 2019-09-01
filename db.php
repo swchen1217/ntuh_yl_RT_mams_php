@@ -1,39 +1,20 @@
 <?php
 // API
-require("config.php");
+require("config2.php");
+require("request.php.php");
 
 mb_internal_encoding('UTF-8');
 
-$mode = "";
-if(isset($_REQUEST["mode"]))
-	$mode=$_REQUEST["mode"];
-$LastModified = "";
-if(isset($_REQUEST["LastModified"]))
-	$LastModified=$_REQUEST["LastModified"];
-$josn_data = "";
-if(isset($_REQUEST["josn_data"]))
-	$josn_data=$_REQUEST["josn_data"];
-$id = "";
-if(isset($_REQUEST["id"]))
-	$id=$_REQUEST["id"];
-$acc = "";
-if(isset($_REQUEST["acc"]))
-	$acc=$_REQUEST["acc"];
-$pw = "";
-if(isset($_REQUEST["pw"]))
-	$pw=$_REQUEST["pw"];
-$DID = "";
-if(isset($_REQUEST["DID"]))
-	$DID=$_REQUEST["DID"];
-$user = "";
-if(isset($_REQUEST["user"]))
-	$user=$_REQUEST["user"];
-$position = "";
-if(isset($_REQUEST["position"]))
-	$position=$_REQUEST["position"];
-$status = "";
-if(isset($_REQUEST["status"]))
-	$status=$_REQUEST["status"];
+$mode = request("mode");
+$LastModified = request("LastModified");
+$josn_data = request("josn_data");
+$id = request("id");
+$acc = request("acc");
+$pw = request("pw");
+$DID = request("DID");
+$user = request("user");
+$position = request("position");
+$status = request("status");
 
 $key=array("DID","category","model","number","user","position","status","LastModified");
 
