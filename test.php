@@ -1,8 +1,8 @@
 <?php
-$acc = filter_input(INPUT_POST, "acc");
-if (!$acc) $acc = filter_input(INPUT_GET, "acc");
 
 require("config2.php");
+
+$acc=requst("acc");
 
 $sql = 'SELECT * FROM user_tb where account=:acc';
 $rs = $db->prepare($sql);
@@ -11,4 +11,11 @@ $rs->execute();
 while ($row = $rs->fetch(PDO::FETCH_NUM)) {
     echo $row[1] . "<br>";
 }
+
+function requst($key) {
+    $tmp = filter_input(INPUT_POST, $key);
+    if (!$tmp) $tmp = filter_input(INPUT_GET, $key);
+    return $tmp;
+}
+
 ?>
