@@ -1,5 +1,7 @@
 <?php
 // API
+// $db = new PDO('mysql:host='.DB_HOST.';dbname='.DB_DBNAME.';charset=utf8', DB_USER, DB_PASS);
+
 require("config.php");
 require("request.php");
 
