@@ -25,7 +25,6 @@ if (!function_exists('eregi')) {
     }
 }
 
-
 $mode = request("mode");
 $acc = request("acc");
 $pw = request("pw");
