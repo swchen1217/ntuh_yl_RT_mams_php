@@ -24,7 +24,6 @@ if (!function_exists('eregi')) {
         return preg_match('/' . $pattern . '/i', $string, $regs);
     }
 }
-
 $mode = request("mode");
 $acc = request("acc");
 $pw = request("pw");
