@@ -157,7 +157,8 @@ if($mode=="get_create_time"){
     if($rs->rowCount()!=0){
         list($create_time,$permission) = $rs->fetch(PDO::FETCH_NUM);
         if($permission!='-1'){
-            echo $create_time;
+            //echo $create_time;
+            echo date();
         }else{
             echo 'no_acc';
         }
