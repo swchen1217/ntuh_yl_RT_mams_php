@@ -39,54 +39,48 @@ if ($mode == "login_check") {
     $rs = $db->prepare($sql);
     $rs->bindValue(':acc', $acc, PDO::PARAM_STR);
     $rs->execute();
-    if ($rs->rowCount() == 0) {
+    list($pw_r, $permission_r_first) = $rs->fetch(PDO::FETCH_NUM);
+    if ($permission_r_first == "-1") {
         echo "no_acc";
-        $db = null;
-        exit;
     } else {
-        list($pw_r, $permission_r_first) = $rs->fetch(PDO::FETCH_NUM);
-        if ($permission_r_first == "-1") {
-            echo "no_acc";
-        } else {
-            if (substr($pw, 0, 6) == "tmppw_") {
-                $sql2 = 'SELECT tmppw,application_time FROM `user_tmppw_tb` WHERE `account`=:acc order by application_time desc';
-                $rs2 = $db->prepare($sql2);
-                $rs2->bindValue(':acc', $acc, PDO::PARAM_STR);
-                $rs2->execute();
-                if ($rs2->rowCount() == 0)
-                    echo "tmppw_no_tmppw";
-                else {
-                    list($tmppw_r, $application_time_r) = $rs2->fetch(PDO::FETCH_NUM);
-                    if ($pw == $tmppw_r) {
-                        if ((strtotime(date("Y-m-d H:i:s", time())) - strtotime($application_time_r)) <= 1800) {
-                            $sql3 = 'SELECT name,permission FROM `user_tb` WHERE `account`=:acc';
-                            $rs3 = $db->prepare($sql3);
-                            $rs3->bindValue(':acc', $acc, PDO::PARAM_STR);
-                            $rs3->execute();
-                            list($name_r, $permission_r) = $rs3->fetch(PDO::FETCH_NUM);
-                            if ($permission_r != "0")
-                                echo 'ok_tmppw,' . $name_r . ',' . $permission_r;
-                            else
-                                echo 'no_enable';
-                        } else
-                            echo "tmppw_timeout";
+        if (substr($pw, 0, 6) == "tmppw_") {
+            $sql2 = 'SELECT tmppw,application_time FROM `user_tmppw_tb` WHERE `account`=:acc order by application_time desc';
+            $rs2 = $db->prepare($sql2);
+            $rs2->bindValue(':acc', $acc, PDO::PARAM_STR);
+            $rs2->execute();
+            if ($rs2->rowCount() == 0)
+                echo "tmppw_no_tmppw";
+            else {
+                list($tmppw_r, $application_time_r) = $rs2->fetch(PDO::FETCH_NUM);
+                if ($pw == $tmppw_r) {
+                    if ((strtotime(date("Y-m-d H:i:s", time())) - strtotime($application_time_r)) <= 1800) {
+                        $sql3 = 'SELECT name,permission FROM `user_tb` WHERE `account`=:acc';
+                        $rs3 = $db->prepare($sql3);
+                        $rs3->bindValue(':acc', $acc, PDO::PARAM_STR);
+                        $rs3->execute();
+                        list($name_r, $permission_r) = $rs3->fetch(PDO::FETCH_NUM);
+                        if ($permission_r != "0")
+                            echo 'ok_tmppw,' . $name_r . ',' . $permission_r;
+                        else
+                            echo 'no_enable';
                     } else
-                        echo "tmppw_error";
-                }
-            } else {
-                if ($pw_r == $pw) {
-                    $sql4 = 'SELECT name,permission FROM `user_tb` WHERE `account`=:acc';
-                    $rs4 = $db->prepare($sql4);
-                    $rs4->bindValue(':acc', $acc, PDO::PARAM_STR);
-                    $rs4->execute();
-                    list($name_r, $permission_r) = $rs4->fetch(PDO::FETCH_NUM);
-                    if ($permission_r != "0")
-                        echo 'ok,' . $name_r . ',' . $permission_r;
-                    else
-                        echo 'no_enable';
+                        echo "tmppw_timeout";
                 } else
-                    echo "pw_error";
+                    echo "tmppw_error";
             }
+        } else {
+            if ($pw_r == $pw) {
+                $sql4 = 'SELECT name,permission FROM `user_tb` WHERE `account`=:acc';
+                $rs4 = $db->prepare($sql4);
+                $rs4->bindValue(':acc', $acc, PDO::PARAM_STR);
+                $rs4->execute();
+                list($name_r, $permission_r) = $rs4->fetch(PDO::FETCH_NUM);
+                if ($permission_r != "0")
+                    echo 'ok,' . $name_r . ',' . $permission_r;
+                else
+                    echo 'no_enable';
+            } else
+                echo "pw_error";
         }
     }
     exit;
@@ -152,6 +146,23 @@ if ($mode == "forget_pw") {
     } catch (Exception $e) {
         echo 'Message could not be sent.';
         echo 'Mailer Error: ' . $mail->ErrorInfo;
+    }
+    exit;
+}
+if($mode=="get_create_time"){
+    $sql = 'SELECT `created`,`permission` FROM `user_tb` WHERE `account`=:acc';
+    $rs = $db->prepare($sql);
+    $rs->bindValue(':acc', $acc, PDO::PARAM_STR);
+    $rs->execute();
+    if($rs->rowCount()!=0){
+        list($create_time,$permission) = $rs->fetch(PDO::FETCH_NUM);
+        if($permission!='-1'){
+            echo $create_time;
+        }else{
+            echo 'no_acc';
+        }
+    }else{
+        echo 'no_acc';
     }
     exit;
 }
