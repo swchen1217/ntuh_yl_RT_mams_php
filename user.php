@@ -35,11 +35,11 @@ if ($mode == "connection_test") {
     echo "connection_ok";
 }
 if ($mode == "login_check") {
-    $sql = "SELECT password,permission,name,created FROM `user_tb` WHERE `account`=:acc";
+    $sql = "SELECT password,permission,name FROM `user_tb` WHERE `account`=:acc";
     $rs = $db->prepare($sql);
     $rs->bindValue(':acc', $acc, PDO::PARAM_STR);
     $rs->execute();
-    list($pw_r, $permission_r,$name_r,$created) = $rs->fetch(PDO::FETCH_NUM);
+    list($pw_r, $permission_r,$name_r) = $rs->fetch(PDO::FETCH_NUM);
     if($pw_r==$pw){
         if($permission_r!='0'){
             echo 'ok,' . $name_r . ',' . $permission_r;
