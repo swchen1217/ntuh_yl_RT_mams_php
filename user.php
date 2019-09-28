@@ -40,8 +40,7 @@ if ($mode == "login_check") {
     $rs->bindValue(':acc', $acc, PDO::PARAM_STR);
     $rs->execute();
     list($pw_r, $permission_r,$name_r,$created) = $rs->fetch(PDO::FETCH_NUM);
-    $md5=md5(date('YmdHis',strtotime($created)).$pw_r);
-    if($md5==$pw){
+    if($pw_r==$pw){
         if($permission_r!='0'){
             echo 'ok,' . $name_r . ',' . $permission_r;
         }else
