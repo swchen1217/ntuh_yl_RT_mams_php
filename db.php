@@ -106,72 +106,18 @@ if ($mode == "update_device_tb_storeroom") {
 function UserCheck($acc_in, $pw_in, $permission_in, PDO $mDB)
 {
     if ($acc_in != "" && $pw_in != "") {
-        $sql = "SELECT password,permission,name,created FROM `user_tb` WHERE `account`=:acc";
+        $sql = "SELECT password,permission FROM `user_tb` WHERE `account`=:acc";
         $rs = $mDB->prepare($sql);
         $rs->bindValue(':acc', $acc_in, PDO::PARAM_STR);
         $rs->execute();
         list($pw_r, $permission_r) = $rs->fetch(PDO::FETCH_NUM);
-        if($pw_r==$pw){
+        if($pw_r==$pw_in){
             if($permission_r!='0'){
-
+                return true;
             }else
-                echo 'no_enable';
-        }else
-            echo "pw_error";
-
-
-        $sql = 'SELECT password,permission FROM `user_tb` WHERE `account`=:acc_in';
-        $rs = $mDB->prepare($sql);
-        $rs->bindValue(':acc_in', $acc_in, PDO::PARAM_STR);
-        $rs->execute();
-        if ($rs->rowCount() == 0) {
-            return false;
-        } else {
-            list($pw_r, $permission_r_first) = $rs->fetch(PDO::FETCH_NUM);
-            if ($permission_r_first == "-1") {
                 return false;
-            } else {
-                if (substr($pw_in, 0, 6) == "tmppw_") {
-                    $sql2 = 'SELECT tmppw,application_time FROM `user_tmppw_tb` WHERE `account`=:acc_in order by application_time desc';
-                    $rs2 = $mDB->prepare($sql2);
-                    $rs2->bindValue(':acc_in', $acc_in, PDO::PARAM_STR);
-                    $rs2->execute();
-                    if ($rs2->rowCount() == 0)
-                        return false;
-                    else {
-                        list($tmppw_r, $application_time_r) = $rs2->fetch(PDO::FETCH_NUM);
-                        if ($pw_in == $tmppw_r) {
-                            if ((strtotime(date("Y-m-d H:i:s", time())) - strtotime($application_time_r)) <= 1800) {
-                                $sql3 = 'SELECT name,permission FROM `user_tb` WHERE `account`=:acc_in';
-                                $rs3 = $mDB->prepare($sql3);
-                                $rs3->bindValue(':acc_in', $acc_in, PDO::PARAM_STR);
-                                $rs3->execute();
-                                list($name_r, $permission_r) = $rs3->fetch(PDO::FETCH_NUM);
-                                if ((int)$permission_r >= $permission_in)
-                                    echo true;
-                                else
-                                    return false;
-                            } else
-                                return false;
-                        } else
-                            return false;
-                    }
-                } else {
-                    if ($pw_r == $pw_in) {
-                        $sql4 = 'SELECT name,permission FROM `user_tb` WHERE `account`=:acc_in';
-                        $rs4 = $mDB->prepare($sql4);
-                        $rs4->bindValue(':acc_in', $acc_in, PDO::PARAM_STR);
-                        $rs4->execute();
-                        list($name_r, $permission_r) = $rs4->fetch(PDO::FETCH_NUM);
-                        if ((int)$permission_r >= $permission_in)
-                            return true;
-                        else
-                            return false;
-                    } else
-                        return false;
-                }
-            }
-        }
+        }else
+            return false;
     } else
         return false;
 }
