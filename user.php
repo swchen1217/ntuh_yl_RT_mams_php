@@ -152,17 +152,13 @@ if ($mode == "forget_pw") {
     exit;
 }
 if($mode=="get_create_time"){
-    $sql = 'SELECT `created`,`permission` FROM `user_tb` WHERE `account`=:acc';
+    $sql = 'SELECT `created` FROM `user_tb` WHERE `account`=:acc';
     $rs = $db->prepare($sql);
     $rs->bindValue(':acc', $acc, PDO::PARAM_STR);
     $rs->execute();
     if($rs->rowCount()!=0){
-        list($create_time,$permission) = $rs->fetch(PDO::FETCH_NUM);
-        if($permission!='-1'){
-            echo date('YmdHis',strtotime($create_time));
-        }else{
-            echo 'no_acc';
-        }
+        list($create_time) = $rs->fetch(PDO::FETCH_NUM);
+        echo date('YmdHis',strtotime($create_time));
     }else{
         echo 'no_acc';
     }
