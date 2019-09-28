@@ -105,8 +105,21 @@ if ($mode == "update_device_tb_storeroom") {
 }
 function UserCheck($acc_in, $pw_in, $permission_in, PDO $mDB)
 {
-    //require("config.php");
     if ($acc_in != "" && $pw_in != "") {
+        $sql = "SELECT password,permission,name,created FROM `user_tb` WHERE `account`=:acc";
+        $rs = $mDB->prepare($sql);
+        $rs->bindValue(':acc', $acc_in, PDO::PARAM_STR);
+        $rs->execute();
+        list($pw_r, $permission_r) = $rs->fetch(PDO::FETCH_NUM);
+        if($pw_r==$pw){
+            if($permission_r!='0'){
+
+            }else
+                echo 'no_enable';
+        }else
+            echo "pw_error";
+
+
         $sql = 'SELECT password,permission FROM `user_tb` WHERE `account`=:acc_in';
         $rs = $mDB->prepare($sql);
         $rs->bindValue(':acc_in', $acc_in, PDO::PARAM_STR);
