@@ -40,6 +40,8 @@ if ($mode == "login_check") {
     $rs->bindValue(':acc', $acc, PDO::PARAM_STR);
     $rs->execute();
     list($pw_r, $permission_r_first) = $rs->fetch(PDO::FETCH_NUM);
+
+
     if ($permission_r_first == "-1") {
         echo "no_acc";
     } else {
@@ -157,7 +159,6 @@ if($mode=="get_create_time"){
     if($rs->rowCount()!=0){
         list($create_time,$permission) = $rs->fetch(PDO::FETCH_NUM);
         if($permission!='-1'){
-            //echo $create_time;
             echo date('YmdHis',strtotime($create_time));
         }else{
             echo 'no_acc';
