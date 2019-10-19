@@ -1,6 +1,9 @@
 <?php
 
-require("config.php");
+echo uniqid('swchen1217').'<br>';
+echo md5(uniqid('swchen1217'));
+
+/*require("config.php");
 require("request.php");
 
 $acc=request("acc");
@@ -12,5 +15,5 @@ $rs->execute();
 
 while ($row = $rs->fetch(PDO::FETCH_NUM)) {
     echo $row[1] . "<br>";
-}
+}*/
 ?>
