@@ -73,6 +73,20 @@ if ($mode == "check_has_email") {
 if ($mode == "forget_pw") {
     // TODO
     $sql = 'SELECT name,account FROM `user_tb` WHERE `email`=:email';
+    $rs=$db->prepare($sql);
+    $rs->bindValue(':email', $email, PDO::PARAM_STR);
+    $rs->execute();
+    if($rs->rowCount()==0){
+        echo 'email_not_exist';
+    }else{
+        list($name_r, $acc_r) = $rs->fetch(PDO::FETCH_NUM);
+        
+
+    }
+
+
+    // OLD
+    $sql = 'SELECT name,account FROM `user_tb` WHERE `email`=:email';
     $rs = $db->prepare($sql);
     $rs->bindValue(':email', $email, PDO::PARAM_STR);
     $rs->execute();
