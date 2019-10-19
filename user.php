@@ -71,7 +71,6 @@ if ($mode == "check_has_email") {
     exit;
 }
 if ($mode == "forget_pw") {
-    // TODO
     $sql = 'SELECT name,account FROM `user_tb` WHERE `email`=:email';
     $rs = $db->prepare($sql);
     $rs->bindValue(':email', $email, PDO::PARAM_STR);
