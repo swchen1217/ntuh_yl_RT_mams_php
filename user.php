@@ -30,6 +30,7 @@ $pw = request("pw");
 $new_pw = request("new_pw");
 $email = request("email");
 $redirection = request("redirection");
+$token = request("token");
 
 if ($mode == "connection_test") {
     echo "connection_ok";
@@ -167,6 +168,21 @@ if ($mode == "get_create_time") {
     } else {
         echo 'no_acc';
     }
+    exit;
+}
+if($mode=="rstpw_check"){
+    // todo
+    $sql = 'SELECT `account`,`apply_time` FROM `rstpw_token_tb` WHERE `token`=:token';
+    $rs = $db->prepare($sql);
+    $rs->bindValue(':token', $token, PDO::PARAM_STR);
+    $rs->execute();
+    if ($rs->rowCount() != 0) {
+        list($create_time) = $rs->fetch(PDO::FETCH_NUM);
+        echo date('YmdHis', strtotime($create_time));
+    } else {
+        echo 'no_acc';
+    }
+
     exit;
 }
 ?>
