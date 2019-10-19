@@ -88,11 +88,11 @@ if ($mode == "forget_pw") {
         $rs2->bindValue(':d', date("Y-m-d H:i:s", time()), PDO::PARAM_STR);
         $rs2->execute();
 
-        $forget_pw_mail_body = $name_r . ' 你好<br>員工編號(帳號):' . $acc_r . '<br>請使用以下連結更改密碼<br><span style="color: red; ">注意:連結僅在<b>30分鐘</b>內有效,請在<b>30分鐘</b>內更改密碼,否則須重新申請</span><br>更改密碼連結:<a href="' . SERVER_IP_WEB . '/index.html?token=' . $token . '#ChangePw">' . SERVER_IP_WEB . '/change_pw.php?token=' . $token . '</a>';
+        $forget_pw_mail_body = $name_r . ' 你好<br>員工編號(帳號):' . $acc_r . '<br>請使用以下連結更改密碼<br><span style="color: red; ">注意:連結僅在<b>30分鐘</b>內有效,請在<b>30分鐘</b>內更改密碼,否則須重新申請</span><br>更改密碼連結:<a href="' . SERVER_IP_WEB . '/index.html?token=' . $token . '#ChangePw">' . SERVER_IP_WEB . '/change_pw.php?token=' . $token . '#ChangePw"</a>';
 
         $mail = new PHPMailer(true);
         try {
-            $mail->SMTPDebug = 3;
+            //$mail->SMTPDebug = 3;
             $mail->isSMTP();
             $mail->Charset = 'UTF-8';
             $mail->Host = 'ssl://smtp.gmail.com:465';
