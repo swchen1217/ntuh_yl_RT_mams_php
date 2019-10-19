@@ -39,13 +39,13 @@ if ($mode == "login_check") {
     $rs = $db->prepare($sql);
     $rs->bindValue(':acc', $acc, PDO::PARAM_STR);
     $rs->execute();
-    list($pw_r, $permission_r,$name_r) = $rs->fetch(PDO::FETCH_NUM);
-    if($pw_r==$pw){
-        if($permission_r!='0'){
+    list($pw_r, $permission_r, $name_r) = $rs->fetch(PDO::FETCH_NUM);
+    if ($pw_r == $pw) {
+        if ($permission_r != '0') {
             echo 'ok,' . $name_r . ',' . $permission_r;
-        }else
+        } else
             echo 'no_enable';
-    }else
+    } else
         echo "pw_error";
     exit;
 }
@@ -73,23 +73,22 @@ if ($mode == "check_has_email") {
 if ($mode == "forget_pw") {
     // TODO
     $sql = 'SELECT name,account FROM `user_tb` WHERE `email`=:email';
-    $rs=$db->prepare($sql);
+    $rs = $db->prepare($sql);
     $rs->bindValue(':email', $email, PDO::PARAM_STR);
     $rs->execute();
-    if($rs->rowCount()==0){
+    if ($rs->rowCount() == 0) {
         echo 'email_not_exist';
-    }else{
+    } else {
         list($name_r, $acc_r) = $rs->fetch(PDO::FETCH_NUM);
-        $token=md5(uniqid($acc_r));
+        $token = md5(uniqid($acc_r));
         $sql2 = "insert into rstpw_token_tb(account,token,apply_time)values(:acc_r,:token,:d)";
         $rs2 = $db->prepare($sql2);
         $rs2->bindValue(':acc_r', $acc_r, PDO::PARAM_STR);
         $rs2->bindValue(':token', $token, PDO::PARAM_STR);
         $rs2->bindValue(':d', date("Y-m-d H:i:s", time()), PDO::PARAM_STR);
         $rs2->execute();
-
-        // TODO
-        $forget_pw_mail_body = $name . ' 你好<br>員工編號(帳號):' . $acc_2 . '<br>請使用以下連結更改密碼<br>可在有效時間內使用臨時密碼登入醫療儀器管理系統<br>臨時密碼:' . $tmp_pw . '<br><font color=red>注意:臨時密碼與連結僅在<b>30分鐘</b>內有效,請在<b>30分鐘</b>內更改密碼,否則須重新申請</font><br><font color=red>注意:新密碼不允許以"<b>tmppw_</b>"為開頭</font><br>更改密碼連結:<a href="http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?acc=' . $acc_2 . '&tmppw=' . $tmp_pw . '">http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?acc=' . $acc_2 . '&tmppw=' . $tmp_pw . '</a>';
+        
+        $forget_pw_mail_body = $name_r . ' 你好<br>員工編號(帳號):' . $acc_r . '<br>請使用以下連結更改密碼<br><span style="color: red; ">注意:連結僅在<b>30分鐘</b>內有效,請在<b>30分鐘</b>內更改密碼,否則須重新申請</span><br>更改密碼連結:<a href="' . SERVER_IP_WEB . '/index.html?token=' . $token . '#ChangePw">' . SERVER_IP_WEB . '/change_pw.php?token=' . $token . '</a>';
 
         $mail = new PHPMailer(true);
         try {
@@ -107,20 +106,16 @@ if ($mode == "forget_pw") {
             $mail->Body = $forget_pw_mail_body;
             $mail->send();
             echo '寄信成功';
-            if ($redirection == "true") {
-                header('Location: http://swchen1217.ddns.net/ntuh_yl_RT_mdms_php/change_pw.php?redirection_ok=true&acc=' . $acc_2);
-                exit;
-            }
         } catch (Exception $e) {
             echo 'Message could not be sent.';
             echo 'Mailer Error: ' . $mail->ErrorInfo;
         }
-
+        exit;
     }
 
 
     // OLD
-    $sql = 'SELECT name,account FROM `user_tb` WHERE `email`=:email';
+    /*$sql = 'SELECT name,account FROM `user_tb` WHERE `email`=:email';
     $rs = $db->prepare($sql);
     $rs->bindValue(':email', $email, PDO::PARAM_STR);
     $rs->execute();
@@ -160,17 +155,17 @@ if ($mode == "forget_pw") {
         echo 'Message could not be sent.';
         echo 'Mailer Error: ' . $mail->ErrorInfo;
     }
-    exit;
+    exit;*/
 }
-if($mode=="get_create_time"){
+if ($mode == "get_create_time") {
     $sql = 'SELECT `created` FROM `user_tb` WHERE `account`=:acc';
     $rs = $db->prepare($sql);
     $rs->bindValue(':acc', $acc, PDO::PARAM_STR);
     $rs->execute();
-    if($rs->rowCount()!=0){
+    if ($rs->rowCount() != 0) {
         list($create_time) = $rs->fetch(PDO::FETCH_NUM);
-        echo date('YmdHis',strtotime($create_time));
-    }else{
+        echo date('YmdHis', strtotime($create_time));
+    } else {
         echo 'no_acc';
     }
     exit;
