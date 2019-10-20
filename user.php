@@ -219,15 +219,15 @@ if ($mode == "rstpw_submit") {
     }
     exit;
 }
-if($mode=="chgpw"){
+if ($mode == "chgpw") {
     $sql = 'SELECT `password` FROM `user_tb` WHERE `account`=:acc';
     $rs = $db->prepare($sql);
     $rs->bindValue(':acc', $acc, PDO::PARAM_STR);
     $rs->execute();
     list($pw_r) = $rs->fetch(PDO::FETCH_NUM);
-    if($old_pw!=$pw_r){
+    if ($pw_r != $old_pw) {
         echo "old_pw_error";
-    }else{
+    } else {
         $sql2 = 'UPDATE `user_tb` SET `password`=:npw WHERE `account`=:acc';
         $rs2 = $db->prepare($sql2);
         $rs2->bindValue(':npw', $new_pw, PDO::PARAM_STR);
