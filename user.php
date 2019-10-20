@@ -171,14 +171,14 @@ if ($mode == "get_create_time") {
     exit;
 }
 if($mode=="rstpw_check"){
-    $sql = 'SELECT `apply_time` FROM `rstpw_token_tb` WHERE `token`=:token';
+    $sql = 'SELECT `apply_time`,`account` FROM `rstpw_token_tb` WHERE `token`=:token';
     $rs = $db->prepare($sql);
     $rs->bindValue(':token', $token, PDO::PARAM_STR);
     $rs->execute();
     if ($rs->rowCount() != 0) {
-        list($time_r) = $rs->fetch(PDO::FETCH_NUM);
+        list($time_r,$acc_r) = $rs->fetch(PDO::FETCH_NUM);
         if((strtotime(date("Y-m-d H:i:s", time())) - strtotime($time_r)) <= 1800){
-            echo "token_ok";
+            echo "token_ok,".$acc_r;
         }else{
             echo "token_timeout";
         }
