@@ -171,18 +171,20 @@ if ($mode == "get_create_time") {
     exit;
 }
 if($mode=="rstpw_check"){
-    // todo
-    $sql = 'SELECT `account`,`apply_time` FROM `rstpw_token_tb` WHERE `token`=:token';
+    $sql = 'SELECT `apply_time` FROM `rstpw_token_tb` WHERE `token`=:token';
     $rs = $db->prepare($sql);
     $rs->bindValue(':token', $token, PDO::PARAM_STR);
     $rs->execute();
     if ($rs->rowCount() != 0) {
-        list($create_time) = $rs->fetch(PDO::FETCH_NUM);
-        echo date('YmdHis', strtotime($create_time));
+        list($time_r) = $rs->fetch(PDO::FETCH_NUM);
+        if((strtotime(date("Y-m-d H:i:s", time())) - strtotime($time_r)) <= 1800){
+            echo "token_ok";
+        }else{
+            echo "token_timeout";
+        }
     } else {
-        echo 'no_acc';
+        echo 'hasnot_token';
     }
-
     exit;
 }
 ?>
