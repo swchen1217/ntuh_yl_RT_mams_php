@@ -178,13 +178,45 @@ if($mode=="rstpw_check"){
     if ($rs->rowCount() != 0) {
         list($time_r,$acc_r) = $rs->fetch(PDO::FETCH_NUM);
         if((strtotime(date("Y-m-d H:i:s", time())) - strtotime($time_r)) <= 1800){
-            echo "token_ok,".$acc_r;
+            $sql2 = 'SELECT `created` FROM `user_tb` WHERE `account`=:acc';
+            $rs2 = $db->prepare($sql2);
+            $rs2->bindValue(':acc', $acc_r, PDO::PARAM_STR);
+            $rs2->execute();
+            list($create_time_r) = $rs2->fetch(PDO::FETCH_NUM);
+            echo "token_ok,".$acc_r.",".date('YmdHis', strtotime($create_time_r));
         }else{
             echo "token_timeout";
         }
     } else {
         echo 'hasnot_token';
     }
+    exit;
+}
+if($mode=="rstpw_submit"){
+    $sql = 'SELECT `apply_time`,`account` FROM `rstpw_token_tb` WHERE `token`=:token';
+    $rs = $db->prepare($sql);
+    $rs->bindValue(':token', $token, PDO::PARAM_STR);
+    $rs->execute();
+    if ($rs->rowCount() != 0) {
+        list($time_r,$acc_r) = $rs->fetch(PDO::FETCH_NUM);
+        if((strtotime(date("Y-m-d H:i:s", time())) - strtotime($time_r)) <= 1800){
+            $sql2 = 'UPDATE `user_tb` SET `password`=:npw WHERE `account`=:acc';
+            $rs2 = $db->prepare($sql2);
+            $rs2->bindValue(':npw', $new_pw, PDO::PARAM_STR);
+            $rs2->bindValue(':acc', $acc_r, PDO::PARAM_STR);
+            $rs2->execute();
+            $sql3 = 'DELETE FROM `rstpw_token_tb` WHERE `account`=:acc';
+            $rs3 = $db->prepare($sql3);
+            $rs3->bindValue(':acc', $acc_r, PDO::PARAM_STR);
+            $rs3->execute();
+            echo "rstpw_ok";
+        }else{
+            echo "token_timeout";
+        }
+    } else {
+        echo 'hasnot_token';
+    }
+
     exit;
 }
 ?>
