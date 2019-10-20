@@ -31,6 +31,7 @@ $new_pw = request("new_pw");
 $email = request("email");
 $redirection = request("redirection");
 $token = request("token");
+$old_pw = request("old_pw");
 
 if ($mode == "connection_test") {
     echo "connection_ok";
@@ -216,7 +217,6 @@ if ($mode == "rstpw_submit") {
     } else {
         echo 'hasnot_token';
     }
-
     exit;
 }
 ?>
