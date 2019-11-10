@@ -196,7 +196,7 @@ if ($mode == "chgpw") {
 }
 if($mode=="get_user_list"){
     if(UserCheck($acc,$pw,5,$db)){
-        $sql = 'SELECT account, name, permission, email, created FROM `user_tb` WHERE 1';
+        $sql = "SELECT account, name, permission, email, created FROM `user_tb` WHERE `permission`!='-1'";
         $rs = $db->prepare($sql);
         $rs->execute();
         $json=array();
