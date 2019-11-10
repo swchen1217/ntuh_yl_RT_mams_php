@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2019-11-10 04:25:25
+-- 產生時間： 2019-11-10 04:27:06
 -- 伺服器版本： 10.1.40-MariaDB
 -- PHP 版本： 7.3.5
 
@@ -178,25 +178,6 @@ INSERT INTO `user_tb` (`account`, `password`, `name`, `permission`, `email`, `cr
 ('admin', 'c7bcf309dc0573c824ce89a3379ee942', '管理員', 9, 'admin@gmail.com', '2019-09-20 12:34:56'),
 ('swchen1217', '2b10c420ba6d38e3bd164ae6623935e4', '陳思惟', 2, 'swchen1217@gmail.com', '2019-09-28 00:00:00'),
 ('user1', 'a55424f743a51fe0e9316ed10d7e72fe', 'user1', 1, 'user@gmail.com', '2019-09-01 01:23:45');
-
--- --------------------------------------------------------
-
---
--- 資料表結構 `user_tmppw_tb`
---
-
-CREATE TABLE `user_tmppw_tb` (
-  `account` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `tmppw` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `application_time` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- 傾印資料表的資料 `user_tmppw_tb`
---
-
-INSERT INTO `user_tmppw_tb` (`account`, `tmppw`, `application_time`) VALUES
-('swchen1217', 'tmppw_c5170846', '2019-10-19 14:35:10');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
