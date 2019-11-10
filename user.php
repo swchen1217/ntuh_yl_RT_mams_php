@@ -211,6 +211,33 @@ if($mode=="get_user_list"){
     exit;
 }
 if($mode=="chguser"){
-    
+    if(UserCheck($acc,$pw,5,$db)){
+        $data="";
+        if($new_name!="")
+            $data .= "`name`=:name,";
+        if($new_permission!="")
+            $data .= "`permission`=:permission,";
+        if($new_email!="")
+            $data .= "`email`=:email,";
+        if($new_pw!="")
+            $data .= "`password`=:password,";
+        $data=substr($data,0,-1);
+        $sql = 'UPDATE `user_tb` SET' . $data .' WHERE `account`=:acc';
+        $rs = $db->prepare($sql);
+        $rs->bindValue(':acc', $operate_acc, PDO::PARAM_STR);
+        if($new_name!="")
+            $rs->bindValue(':name', $new_name, PDO::PARAM_STR);
+        if($new_permission!="")
+            $rs->bindValue(':permission', $new_permission, PDO::PARAM_STR);
+        if($new_email!="")
+            $rs->bindValue(':email', $new_email, PDO::PARAM_STR);
+        if($new_pw!="")
+            $rs->bindValue(':password', $new_pw, PDO::PARAM_STR);
+        $rs->execute();
+        echo "ok";
+    }else{
+        echo "error";
+    }
+    exit;
 }
 ?>
