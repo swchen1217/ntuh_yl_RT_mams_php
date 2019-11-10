@@ -28,11 +28,15 @@ if (!function_exists('eregi')) {
 $mode = request("mode");
 $acc = request("acc");
 $pw = request("pw");
-$new_pw = request("new_pw");
 $email = request("email");
 $redirection = request("redirection");
 $token = request("token");
 $old_pw = request("old_pw");
+$new_pw = request("new_pw");
+$operate_acc = request("operate_acc");
+$new_name = request("new_name");
+$new_permission = request("new_permission");
+$new_email = request("new_email");
 
 if ($mode == "connection_test") {
     echo "connection_ok";
@@ -205,5 +209,8 @@ if($mode=="get_user_list"){
         echo json_encode($json);
     }
     exit;
+}
+if($mode=="chguser"){
+    
 }
 ?>
