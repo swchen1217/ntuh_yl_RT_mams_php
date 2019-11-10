@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2019-09-29 05:31:42
+-- 產生時間： 2019-11-10 04:25:25
 -- 伺服器版本： 10.1.40-MariaDB
 -- PHP 版本： 7.3.5
 
@@ -44,11 +44,11 @@ CREATE TABLE `device_tb` (
 --
 
 INSERT INTO `device_tb` (`DID`, `category`, `model`, `number`, `user`, `position`, `status`, `LastModified`) VALUES
-('MDMS.D0001', 'C2', 'a', 'a01', '-', '*3N', '2', '2019-09-15 13:51:52'),
+('MDMS.D0001', 'C2', 'a', 'a01', '-', '*3N', '2', '2019-11-02 22:02:50'),
 ('MDMS.D0003', 'C3', 'a', 'a02', '456', 'I-02', '-1', '2019-07-15 15:03:00'),
 ('MDMS.D0005', 'C3', 'a', 'a05', '6764845', 'E8-876', '1', '2019-08-28 21:44:32'),
 ('MDMS.D0006', 'C5', 'b', 'b01', '-', '*5A', '2', '2019-08-28 23:48:12'),
-('MDMS.D0008', 'C6', 'c', 'c01', '1616979', 'Y2-568', '1', '2019-08-28 01:29:40'),
+('MDMS.D0008', 'C6', 'c', 'c01', '5555555', '2AICU-01', '1', '2019-11-02 17:09:59'),
 ('MDMS.D0007', '', '', '', '', '', '-1', '2019-08-28 21:30:00'),
 ('MDMS.D0010', 'C8', 'e', 'e04', '', '', '-1', '2019-08-28 21:38:00');
 
@@ -118,6 +118,28 @@ INSERT INTO `position_item_tb` (`type`, `item`) VALUES
 -- --------------------------------------------------------
 
 --
+-- 資料表結構 `rstpw_token_tb`
+--
+
+CREATE TABLE `rstpw_token_tb` (
+  `account` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `token` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `apply_time` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- 傾印資料表的資料 `rstpw_token_tb`
+--
+
+INSERT INTO `rstpw_token_tb` (`account`, `token`, `apply_time`) VALUES
+('swchen1217', '55ee9c594535bacbc7acb7f331add5b4', '2019-10-20 21:50:53'),
+('swchen1217', '8f3cc3878e896bc3418a69b2fb539287', '2019-10-20 21:56:54'),
+('swchen1217', 'f04d522499e535b22ae55f618ce52359', '2019-10-20 23:08:39'),
+('swchen1217', 'da199abf508420b489d391115d103786', '2019-10-22 08:55:41');
+
+-- --------------------------------------------------------
+
+--
 -- 資料表結構 `system_tb`
 --
 
@@ -168,6 +190,13 @@ CREATE TABLE `user_tmppw_tb` (
   `tmppw` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `application_time` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- 傾印資料表的資料 `user_tmppw_tb`
+--
+
+INSERT INTO `user_tmppw_tb` (`account`, `tmppw`, `application_time`) VALUES
+('swchen1217', 'tmppw_c5170846', '2019-10-19 14:35:10');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
