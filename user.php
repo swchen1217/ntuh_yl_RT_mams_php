@@ -5,6 +5,7 @@ use PHPMailer\PHPMailer\Exception;
 
 require("config.php");
 require("request.php");
+require("UserCheck.php");
 
 require('./PHPMailer/src/Exception.php');
 require('./PHPMailer/src/PHPMailer.php');
@@ -190,6 +191,18 @@ if ($mode == "chgpw") {
         $rs2->bindValue(':acc', $acc, PDO::PARAM_STR);
         $rs2->execute();
         echo "ok";
+    }
+    exit;
+}
+if($mode=="get_user_list"){
+    if(UserCheck($acc,$pw,5,$db)){
+        $sql = 'SELECT account, name, permission, email, created FROM `user_tb` WHERE 1';
+        $rs = $db->prepare($sql);
+        $rs->execute();
+        $json=array();
+        while ($row=$rs->fetch(PDO::FETCH_ASSOC))
+            $json[]=$row;
+        echo json_encode($json);
     }
     exit;
 }
