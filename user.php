@@ -37,6 +37,7 @@ $operate_acc = request("operate_acc");
 $new_name = request("new_name");
 $new_permission = request("new_permission");
 $new_email = request("new_email");
+$new_create_time = request("new_create_time");
 
 if ($mode == "connection_test") {
     echo "connection_ok";
@@ -233,6 +234,23 @@ if($mode=="chguser"){
             $rs->bindValue(':email', $new_email, PDO::PARAM_STR);
         if($new_pw!="")
             $rs->bindValue(':password', $new_pw, PDO::PARAM_STR);
+        $rs->execute();
+        echo "ok";
+    }else{
+        echo "error";
+    }
+    exit;
+}
+if($mode=="newuser"){
+    if(UserCheck($acc,$pw,5,$db)){
+        $sql = 'INSERT INTO `user_tb` (`account`, `password`, `name`, `permission`, `email`, `created`) VALUES (:account, :password, :name, :permission, :email, :created)';
+        $rs = $db->prepare($sql);
+        $rs->bindValue(':account', $operate_acc, PDO::PARAM_STR);
+        $rs->bindValue(':password', $new_pw, PDO::PARAM_STR);
+        $rs->bindValue(':name', $new_name, PDO::PARAM_STR);
+        $rs->bindValue(':permission', $new_permission, PDO::PARAM_STR);
+        $rs->bindValue(':email', $new_email, PDO::PARAM_STR);
+        $rs->bindValue(':created', $new_create_time, PDO::PARAM_STR);
         $rs->execute();
         echo "ok";
     }else{
