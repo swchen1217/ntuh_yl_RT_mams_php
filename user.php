@@ -258,4 +258,20 @@ if($mode=="newuser"){
     }
     exit;
 }
+if($mode="deluser"){
+    if(UserCheck($acc,$pw,5,$db)){
+        $sql = 'DELETE FROM `user_tb` WHERE `account`=:acc';
+        $rs = $db->prepare($sql);
+        $rs->bindValue(':acc', $operate_acc, PDO::PARAM_STR);
+        $rs->execute();
+        $sql2 = "INSERT INTO `user_tb` (`account`,`permission`) VALUES (:acc2,'-1')";
+        $rs2 = $db->prepare($sql2);
+        $rs2->bindValue(':acc2', $operate_acc, PDO::PARAM_STR);
+        $rs2->execute();
+        echo "ok";
+    }else{
+        echo "error";
+    }
+    exit;
+}
 ?>
