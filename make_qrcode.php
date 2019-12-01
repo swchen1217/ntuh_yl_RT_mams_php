@@ -25,7 +25,7 @@ imagettftext($img, $fontSize, $circleSize, $left, $top, $black, $font, 'MDMS.D00
 imagepng($img,'img/output/a01.png');
 imagedestroy($img);
 
-header('Location:./img/output/a01.png');
+//header('Location:./img/output/a01.png');
 
-//echo '<img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=MDMS.D001&qzone=2" alt="" title="" />';
+echo '<img src="./img/output/a01.png" />';
 ?>
