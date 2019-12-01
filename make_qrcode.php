@@ -7,7 +7,7 @@
         $s = '0' . $i;
     mkqr("MDMS.D00" . $s);
     mkqr("MDMS.D05" . $s);
-}/*
+}*/
 
 function mkqr($data)
 {
