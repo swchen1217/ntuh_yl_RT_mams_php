@@ -10,7 +10,7 @@ $new_qrcode_DID=$last_DID;*/
 
 $img_url='./img/a01.png';
 $img = imagecreatefromstring(file_get_contents($img_url));
-//putenv('GDFONTPATH=' . realpath('.'));
+putenv('GDFONTPATH=' . realpath('.'));
 $font = 'Arial.ttf';
 $black = imagecolorallocate($img,255, 225, 255);
 $fontSize = 20;
@@ -19,10 +19,10 @@ $left = 50;
 $top = 210;
 imagettftext($img, $fontSize, $circleSize, $left, $top, $black, $font, 'MDMS.D0001');
 
-//header('Content-Type: image/png');
+header('Content-Type: image/png');
 
-//imagepng($img);
-//imagedestroy($img);
+imagepng($img);
+imagedestroy($img);
 
 //ob_clean();
 //header('Content-Type:image/png');
