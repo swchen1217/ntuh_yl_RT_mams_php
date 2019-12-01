@@ -22,15 +22,10 @@ $left = 63;
 $top = 247;
 imagettftext($img, $fontSize, $circleSize, $left, $top, $black, $font, 'MDMS.D0001');
 
-header('Content-Type: image/png');
-
-imagepng($img);
+imagepng($img,'img/output/a01.png');
 imagedestroy($img);
 
-//ob_clean();
-//header('Content-Type:image/png');
-//imagepng($img,'public/img/666.png');
-//imagedestroy($img);
+header('Location:./img/output/a01.png');
 
 //echo '<img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=MDMS.D001&qzone=2" alt="" title="" />';
 ?>
