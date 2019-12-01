@@ -1,4 +1,7 @@
 <?php
+
+//ini_set('display_errors','off');
+
 require("config.php");
 
 $new_qrcode_DID="";
@@ -19,7 +22,7 @@ $left = 50;
 $top = 210;
 imagettftext($img, $fontSize, $circleSize, $left, $top, $black, $font, 'MDMS.D0001');
 
-header('Content-Type: image/png');
+//header('Content-Type: image/png');
 
 imagepng($img);
 imagedestroy($img);
