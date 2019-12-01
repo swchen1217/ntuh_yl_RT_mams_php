@@ -1,5 +1,5 @@
 <?php
-mkqr("MDMS.D0510");
+mkqr("MDMS.D0001");
 
 function mkqr($data){
     include ('./phpqrcode/qrlib.php');
@@ -14,6 +14,7 @@ function mkqr($data){
         mkdir('./img/deviceqrcode');
     }
     $tmp_url='./img/tmp/'.$data.'.png';
+    $opt_url='./img/deviceqrcode/'.$data.'.png';
     QRcode::png('MDMS.D0001',$tmp_url,'H',3,4);
     $img = imagecreatefromstring(file_get_contents($tmp_url));
     $font = 'C:\Windows\Fonts\arial.ttf';
@@ -26,10 +27,11 @@ function mkqr($data){
     /*//test
     Header("Content-type: image/png");
     imagepng($img);*/
-    imagepng($img,'./img/deviceqrcode/'.$data.'.png');
+    imagepng($img,$opt_url);
     imagedestroy($img);
-
-    //header('Location:./img/deviceqrcode/'.$data.'.png');
-    echo '<img src="./img/deviceqrcode/'.$data.'.png" />';
+    if(is_file($tmp_url))
+        unlink($tmp_url);
+    //header('Location:'.$opt_url);
+    echo '<img src="'.$opt_url.'" />';
 }
 ?>
