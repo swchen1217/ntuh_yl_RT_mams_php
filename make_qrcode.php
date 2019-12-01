@@ -1,9 +1,18 @@
 <?php
-mkqr("MDMS.D1234");
+mkqr("MDMS.D0510");
 
 function mkqr($data){
     include ('./phpqrcode/qrlib.php');
-
+    if(is_dir("./img")){
+        if(!is_dir("./img/tmp"))
+            mkdir('./img/tmp');
+        if(!is_dir("./img/deviceqrcode"))
+            mkdir('./img/deviceqrcode');
+    }else{
+        mkdir("./img");
+        mkdir('./img/tmp');
+        mkdir('./img/deviceqrcode');
+    }
     $tmp_url='./img/tmp/'.$data.'.png';
     QRcode::png('MDMS.D0001',$tmp_url,'H',3,4);
     $img = imagecreatefromstring(file_get_contents($tmp_url));
