@@ -8,7 +8,7 @@ function UserCheck($acc_in, $pw_in, $permission_in, PDO $mDB)
         $rs->execute();
         list($pw_r, $permission_r) = $rs->fetch(PDO::FETCH_NUM);
         if($pw_r==$pw_in){
-            if($permission_r!='0'){
+            if($permission_r>=$permission_in){
                 return true;
             }else
                 return false;
