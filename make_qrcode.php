@@ -1,13 +1,13 @@
 <?php
 //mkqr("MDMS.D0005");
 
-/*for ($i = 1; $i <= 30; $i++) {
+for ($i = 1; $i <= 30; $i++) {
     $s = $i;
     if ($i < 10)
         $s = '0' . $i;
     mkqr("MDMS.D00" . $s);
     mkqr("MDMS.D05" . $s);
-}*/
+}
 
 function mkqr($data)
 {
