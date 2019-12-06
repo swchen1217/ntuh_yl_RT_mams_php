@@ -264,10 +264,10 @@ if($mode="deluser"){
         $rs = $db->prepare($sql);
         $rs->bindValue(':acc', $operate_acc, PDO::PARAM_STR);
         $rs->execute();
-        $sql2 = "INSERT INTO `user_tb` (`account`,`permission`) VALUES (:acc2,'-1')";
+        /*$sql2 = "INSERT INTO `user_tb` (`account`,`permission`) VALUES (:acc2,'-1')";
         $rs2 = $db->prepare($sql2);
         $rs2->bindValue(':acc2', $operate_acc, PDO::PARAM_STR);
-        $rs2->execute();
+        $rs2->execute();*/
         echo "ok";
     }else{
         echo "error";
