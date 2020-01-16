@@ -1,13 +1,19 @@
 <?php
-//mkqr("MDMS.D0005");
+require("request.php");
+$DID = request("DID");
+if(is_file("./img/deviceqrcode/"+$DID+".png"))
+    header('Location:./img/deviceqrcode/'+$DID+'.png');
+else
+    mkqr($DID);
 
-for ($i = 1; $i <= 30; $i++) {
+//mkqr("MDMS.D0005");
+/*for ($i = 1; $i <= 30; $i++) {
     $s = $i;
     if ($i < 10)
         $s = '0' . $i;
     mkqr("MDMS.D00" . $s);
     mkqr("MDMS.D05" . $s);
-}
+}*/
 
 function mkqr($data)
 {
@@ -49,8 +55,8 @@ function mkqr($data)
     imagedestroy($img);
     if (is_file($tmp_url))
         unlink($tmp_url);
-    //header('Location:'.$opt_url);
-    echo '<img src="' . $opt_url . '" />';
+    header('Location:'.$opt_url);
+    //echo '<img src="' . $opt_url . '" />';
 }
 
 ?>
