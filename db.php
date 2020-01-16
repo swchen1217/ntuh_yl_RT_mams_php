@@ -104,10 +104,24 @@ if ($mode == "update_device_tb_storeroom") {
     }
     exit;
 }
-if($mode=="del_position"){
+if ($mode == "del_position") {
     if (UserCheck($acc, $pw, 4, $db)) {
-        $tmp=explode('-',$position);
+        $tmp = explode('-', $position);
         $sql = "DELETE FROM `position_item_tb` WHERE `type`=:type AND `item`=:item";
+        $rs = $db->prepare($sql);
+        $rs->bindValue(':type', $tmp[0], PDO::PARAM_STR);
+        $rs->bindValue(':item', $tmp[1], PDO::PARAM_STR);
+        $rs->execute();
+        echo "ok";
+    } else {
+        echo "user_error";
+    }
+    exit;
+}
+if ($mode == "new_position"){
+    if (UserCheck($acc, $pw, 4, $db)) {
+        $tmp = explode('-', $position);
+        $sql = "INSERT INTO `position_item_tb`(`type`, `item`) VALUES(:type,:item)";
         $rs = $db->prepare($sql);
         $rs->bindValue(':type', $tmp[0], PDO::PARAM_STR);
         $rs->bindValue(':item', $tmp[1], PDO::PARAM_STR);
