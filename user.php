@@ -35,7 +35,7 @@ $old_pw = request("old_pw");
 $new_pw = request("new_pw");
 $operate_acc = request("operate_acc");
 $new_name = request("new_name");
-$new_permission = request("new_permission");
+$new_permission = request("new_permission",true);
 $new_email = request("new_email");
 $new_create_time = request("new_create_time");
 
