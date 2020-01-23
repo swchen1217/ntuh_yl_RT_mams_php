@@ -17,7 +17,7 @@ $pw = request("pw");
 $DID = request("DID");
 $user = request("user");
 $position = request("position");
-$status = request("status");
+$status = request("status",true);
 
 $key = array("DID", "category", "model", "number", "user", "position", "status", "LastModified");
 
