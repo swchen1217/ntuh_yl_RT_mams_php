@@ -18,6 +18,9 @@ $DID = request("DID");
 $user = request("user");
 $position = request("position");
 $status = request("status",true);
+$new_category = request("new_category");
+$new_model = request("new_model");
+$new_number = request("new_number");
 
 $key = array("DID", "category", "model", "number", "user", "position", "status", "LastModified");
 
@@ -26,6 +29,25 @@ if ($mode == "sync_device_tb_download") {
         $sql = 'SELECT * FROM `device_tb` WHERE `LastModified` > :LastModified';
         $rs = $db->prepare($sql);
         $rs->bindValue(':LastModified', $LastModified, PDO::PARAM_STR);
+        $rs->execute();
+        if ($rs->rowCount() == 0) {
+            echo "no_data";
+        } else {
+            $ToJson = array();
+            while ($row = $rs->fetch(PDO::FETCH_ASSOC)) {
+                $ToJson[] = $row;
+            }
+            echo json_encode($ToJson);
+        }
+    } else {
+        echo "user_error";
+    }
+    exit;
+}
+if ($mode == "getDeviceData") {
+    if (UserCheck($acc, $pw, 1, $db)) {
+        $sql = 'SELECT * FROM `device_tb` WHERE status!=-1';
+        $rs = $db->prepare($sql);
         $rs->execute();
         if ($rs->rowCount() == 0) {
             echo "no_data";
@@ -131,6 +153,36 @@ if ($mode == "new_position"){
         echo "user_error";
     }
     exit;
+}
+if($mode=="newdevice"){
+    if(UserCheck($acc,$pw,4,$db)){
+        $sql = 'INSERT INTO `device_tb` (did, category, model, number, status, lastmodified) VALUES (:DID, :category, :model, :number, :status, :LastModified)';
+        $rs = $db->prepare($sql);
+        $rs->bindValue(':DID', getDID($db), PDO::PARAM_STR);
+        $rs->bindValue(':category', $new_category, PDO::PARAM_STR);
+        $rs->bindValue(':model', $new_model, PDO::PARAM_STR);
+        $rs->bindValue(':number', $new_number, PDO::PARAM_STR);
+        $rs->bindValue(':status', '0', PDO::PARAM_STR);
+        $rs->bindValue(':LastModified', date('Y-m-d H:i:s'), PDO::PARAM_STR);
+        $rs->execute();
+        echo "ok";
+    }else{
+        echo "error";
+    }
+    exit;
+}
+
+function getDID(PDO $mDB){
+    $sqlM = 'SELECT DID FROM `device_tb` order by DID desc';
+    $rsM = $mDB->prepare($sqlM);
+    $rsM->execute();
+    $last_num = 0;
+    if ($rsM->rowCount() != 0) {
+        list($DID_r) = $rsM->fetch(PDO::FETCH_NUM);
+        $last_num = substr($DID_r, -4);
+    }
+    $new_DID = sprintf("MDMS.D%04d", $last_num += 1);
+    return $new_DID;
 }
 
 ?>
