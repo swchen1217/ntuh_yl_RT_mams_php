@@ -18,9 +18,14 @@ $DID = request("DID");
 $user = request("user");
 $position = request("position");
 $status = request("status",true);
+$operate_DID = request("operate_DID");
 $new_category = request("new_category");
 $new_model = request("new_model");
 $new_number = request("new_number");
+$new_user = request("new_user");
+$new_position = request("new_position");
+$new_status = request("new_status",true);
+
 
 $key = array("DID", "category", "model", "number", "user", "position", "status", "LastModified");
 
@@ -164,6 +169,45 @@ if($mode=="newdevice"){
         $rs->bindValue(':number', $new_number, PDO::PARAM_STR);
         $rs->bindValue(':status', '0', PDO::PARAM_STR);
         $rs->bindValue(':LastModified', date('Y-m-d H:i:s'), PDO::PARAM_STR);
+        $rs->execute();
+        echo "ok";
+    }else{
+        echo "error";
+    }
+    exit;
+}
+
+if($mode=="chgdevice"){
+    if(UserCheck($acc,$pw,4,$db)){
+        $data="";
+        if($new_category!="")
+            $data .= "`category`=:category,";
+        if($new_model!="")
+            $data .= "`model`=:model,";
+        if($new_number!="")
+            $data .= "`number`=:number,";
+        if($new_user!="")
+            $data .= "`user`=:user,";
+        if($new_position!="")
+            $data .= "`position`=:position,";
+        if($new_status!="")
+            $data .= "`status`=:status,";
+        $data=substr($data,0,-1);
+        $sql = 'UPDATE `device_tb` SET' . $data .' WHERE `DID`=:DID';
+        $rs = $db->prepare($sql);
+        $rs->bindValue(':DID', $operate_DID, PDO::PARAM_STR);
+        if($new_category!="")
+            $rs->bindValue(':category', $new_category, PDO::PARAM_STR);
+        if($new_model!="")
+            $rs->bindValue(':model', $new_model, PDO::PARAM_STR);
+        if($new_number!="")
+            $rs->bindValue(':number', $new_number, PDO::PARAM_STR);
+        if($new_user!="")
+            $rs->bindValue(':user', $new_user, PDO::PARAM_STR);
+        if($new_position!="")
+            $rs->bindValue(':position', $new_position, PDO::PARAM_STR);
+        if($new_status!="")
+            $rs->bindValue(':status', $new_status, PDO::PARAM_STR);
         $rs->execute();
         echo "ok";
     }else{
