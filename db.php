@@ -184,18 +184,29 @@ if($mode=="chgdevice"){
             $data .= "`category`=:category,";
         if($new_model!="")
             $data .= "`model`=:model,";
-        if($new_number!="")
+        if($new_number!=""){
+            $sqlT = 'SELECT * FROM `device_tb` WHERE number=:mNum';
+            $rsT = $db->prepare($sqlT);
+            $rsT->bindValue(':mNum', $new_number, PDO::PARAM_STR);
+            $rsT->execute();
+            if ($rsT->rowCount() != 0){
+                echo "number_error";
+                exit;
+            }
             $data .= "`number`=:number,";
+        }
         if($new_user!="")
             $data .= "`user`=:user,";
         if($new_position!="")
             $data .= "`position`=:position,";
         if($new_status!="")
             $data .= "`status`=:status,";
+        $data .= "`LastModified`=:LastModified,";
         $data=substr($data,0,-1);
         $sql = 'UPDATE `device_tb` SET' . $data .' WHERE `DID`=:DID';
         $rs = $db->prepare($sql);
         $rs->bindValue(':DID', $operate_DID, PDO::PARAM_STR);
+        $rs->bindValue(':LastModified', date('Y-m-d H:i:s'), PDO::PARAM_STR);
         if($new_category!="")
             $rs->bindValue(':category', $new_category, PDO::PARAM_STR);
         if($new_model!="")
